@@ -1,22 +1,104 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= content_for(:title) || "Relationshipmilestones" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<html lang="en" class="h-full">
+<head>
+  <title><%= content_for(:title).presence || "Relationship Milestones" %></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
 
-    <%= yield :head %>
+  <%= yield :head %>
 
-    <link rel="manifest" href="/manifest.json">
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
-    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
-  </head>
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
+</head>
 
-  <body>
+<body class="h-full bg-warm-50 antialiased">
+
+  <%# ─── Sidebar Navigation ─────────────────────────────────── %>
+  <% unless content_for?(:full_page) %>
+    <aside class="sidebar" aria-label="Primary navigation">
+      <%# Logo / wordmark %>
+      <div class="px-6 mb-10">
+        <%= link_to root_path, class: "flex flex-col gap-0.5 group" do %>
+          <span class="font-serif text-title text-ink-800 leading-tight">Milestones</span>
+          <span class="text-micro text-ink-400 tracking-wide">your story, preserved</span>
+        <% end %>
+      </div>
+
+      <%# Primary nav %>
+      <nav class="flex-1 px-3 flex flex-col gap-0.5">
+        <%= link_to dashboard_path, class: "nav-link #{current_page?(dashboard_path) ? 'active' : ''}" do %>
+          <%= inline_svg "nav-dashboard.svg", class: "nav-icon" rescue content_tag(:span, "", class: "nav-icon w-4 h-4 inline-block rounded-sm bg-current opacity-60") %>
+          Dashboard
+        <% end %>
+
+        <% if @relationship %>
+          <%= link_to relationship_path(@relationship), class: "nav-link #{controller_name == 'relationships' ? 'active' : ''}" do %>
+            <%= content_tag :span, "", class: "nav-icon w-4 h-4" %>
+            Timeline
+          <% end %>
+
+          <%= link_to relationship_insights_path(@relationship), class: "nav-link #{controller_name == 'insights' ? 'active' : ''}" do %>
+            <%= content_tag :span, "", class: "nav-icon w-4 h-4" %>
+            Insights
+          <% end %>
+
+          <%= link_to relationship_reflections_path(@relationship), class: "nav-link #{controller_name == 'reflections' ? 'active' : ''}" do %>
+            <%= content_tag :span, "", class: "nav-icon w-4 h-4" %>
+            Reflections
+          <% end %>
+        <% end %>
+      </nav>
+
+      <%# Bottom area — privacy badge + settings %>
+      <div class="px-4 flex flex-col gap-3">
+        <div class="privacy-badge">
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M5 1L9 3V5.5C9 7.43 7.21 9.17 5 9.5C2.79 9.17 1 7.43 1 5.5V3L5 1Z" fill="currentColor" opacity="0.6"/>
+          </svg>
+          Private
+        </div>
+        <%= link_to "#", class: "nav-link text-ink-400" do %>
+          Settings
+        <% end %>
+      </div>
+    </aside>
+
+    <%# ─── Main Content ────────────────────────────────────────── %>
+    <main class="main-content">
+      <%# Flash messages %>
+      <% if notice %>
+        <div class="fixed top-5 right-5 z-50 animate-slide-up">
+          <div class="card px-5 py-3.5 flex items-center gap-3 max-w-sm">
+            <span class="w-1.5 h-1.5 rounded-full bg-sage-400 shrink-0"></span>
+            <p class="text-small text-ink-700"><%= notice %></p>
+            <button onclick="this.parentElement.parentElement.remove()"
+                    class="ml-auto text-ink-300 hover:text-ink-600 transition-colors">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+                <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      <% end %>
+      <% if alert %>
+        <div class="fixed top-5 right-5 z-50 animate-slide-up">
+          <div class="card px-5 py-3.5 flex items-center gap-3 max-w-sm border-rose-200">
+            <span class="w-1.5 h-1.5 rounded-full bg-rose-400 shrink-0"></span>
+            <p class="text-small text-ink-700"><%= alert %></p>
+          </div>
+        </div>
+      <% end %>
+
+      <%= yield %>
+    </main>
+  <% else %>
+    <%# Full-page layout (landing, auth, ending screens) %>
     <%= yield %>
-  </body>
+  <% end %>
+
+</body>
 </html>

@@ -1,0 +1,1294 @@
+{
+  "Minitest": {
+    "coverage": {
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/models/milestone.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          null,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          1,
+          null,
+          13,
+          3,
+          null,
+          1,
+          198,
+          null,
+          null,
+          1,
+          0,
+          null,
+          null,
+          193,
+          1,
+          1,
+          null
+        ],
+        "branches": {}
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/models/application_record.rb": {
+        "lines": [
+          1,
+          1,
+          null
+        ],
+        "branches": {}
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/models/reflection.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          null,
+          12,
+          null,
+          1,
+          0,
+          null,
+          null,
+          1,
+          0,
+          null,
+          null
+        ],
+        "branches": {}
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/models/relationship.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          119,
+          25,
+          null,
+          1,
+          1,
+          null,
+          1,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          11,
+          241,
+          178,
+          null,
+          1,
+          0,
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          44,
+          44,
+          44,
+          44,
+          2,
+          6,
+          36,
+          null,
+          null,
+          null,
+          1,
+          2,
+          null,
+          null
+        ],
+        "branches": {
+          "[:unless, 0, 44, 4, 44, 36]": {
+            "[:else, 1, 44, 4, 44, 36]": 44,
+            "[:then, 2, 44, 4, 44, 20]": 0
+          },
+          "[:case, 3, 47, 4, 51, 7]": {
+            "[:when, 4, 48, 23, 48, 37]": 2,
+            "[:when, 5, 49, 23, 49, 54]": 6,
+            "[:else, 6, 50, 23, 50, 57]": 36
+          }
+        }
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/controllers/relationships_controller.rb": {
+        "lines": [
+          1,
+          1,
+          0,
+          null,
+          null,
+          1,
+          3,
+          3,
+          2,
+          2,
+          null,
+          1,
+          null,
+          null,
+          null,
+          1,
+          40,
+          40,
+          null,
+          40,
+          40,
+          40,
+          null,
+          null,
+          1,
+          0,
+          0,
+          null,
+          null,
+          1,
+          0,
+          0,
+          0,
+          null,
+          null,
+          1,
+          null,
+          1,
+          3,
+          null,
+          null,
+          1,
+          40,
+          40,
+          40,
+          null,
+          null,
+          1,
+          40,
+          40,
+          40,
+          2,
+          2,
+          null,
+          40,
+          null,
+          null
+        ],
+        "branches": {
+          "[:if, 0, 8, 4, 13, 7]": {
+            "[:then, 1, 9, 6, 10, 66]": 2,
+            "[:else, 2, 12, 6, 12, 48]": 1
+          },
+          "[:if, 3, 44, 4, 44, 54]": {
+            "[:then, 4, 44, 4, 44, 34]": 2,
+            "[:else, 5, 44, 4, 44, 54]": 38
+          },
+          "[:while, 6, 51, 4, 54, 7]": {
+            "[:body, 7, 52, 6, 53, 28]": 2
+          }
+        }
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/controllers/application_controller.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          1,
+          null,
+          1,
+          null,
+          1,
+          73,
+          23,
+          50,
+          11,
+          null,
+          null,
+          0,
+          0,
+          null,
+          null,
+          1,
+          23,
+          null,
+          null
+        ],
+        "branches": {
+          "[:if, 0, 11, 4, 12, 57]": {
+            "[:then, 1, 12, 6, 12, 57]": 11,
+            "[:else, 2, 11, 4, 12, 57]": 39
+          },
+          "[:if, 3, 9, 20, 13, 7]": {
+            "[:then, 4, 10, 6, 10, 49]": 23,
+            "[:else, 5, 11, 4, 12, 57]": 50
+          },
+          "[:unless, 6, 20, 4, 20, 81]": {
+            "[:else, 7, 20, 4, 20, 81]": 23,
+            "[:then, 8, 20, 4, 20, 60]": 0
+          }
+        }
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/helpers/application_helper.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          null,
+          198,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          null,
+          194,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          124,
+          0,
+          0,
+          92,
+          32,
+          0,
+          null,
+          null,
+          null,
+          null,
+          1,
+          226,
+          226,
+          226,
+          0,
+          0,
+          0,
+          0,
+          null,
+          null,
+          1,
+          46,
+          null,
+          null,
+          1,
+          202,
+          null,
+          null
+        ],
+        "branches": {
+          "[:case, 0, 28, 4, 34, 7]": {
+            "[:when, 1, 29, 19, 29, 27]": 0,
+            "[:when, 2, 30, 19, 30, 29]": 0,
+            "[:when, 3, 31, 19, 31, 27]": 92,
+            "[:when, 4, 32, 20, 32, 29]": 32,
+            "[:else, 5, 33, 9, 33, 14]": 0
+          },
+          "[:unless, 6, 39, 4, 39, 28]": {
+            "[:else, 7, 39, 4, 39, 28]": 226,
+            "[:then, 8, 39, 4, 39, 16]": 0
+          },
+          "[:if, 9, 41, 4, 41, 52]": {
+            "[:then, 10, 41, 4, 41, 18]": 226,
+            "[:else, 11, 41, 4, 41, 52]": 0
+          },
+          "[:if, 12, 42, 4, 42, 52]": {
+            "[:then, 13, 42, 4, 42, 22]": 0,
+            "[:else, 14, 42, 4, 42, 52]": 0
+          },
+          "[:if, 15, 43, 4, 43, 52]": {
+            "[:then, 16, 43, 4, 43, 29]": 0,
+            "[:else, 17, 43, 4, 43, 52]": 0
+          },
+          "[:if, 18, 44, 4, 44, 60]": {
+            "[:then, 19, 44, 4, 44, 46]": 0,
+            "[:else, 20, 44, 4, 44, 60]": 0
+          },
+          "[:\"&.\", 21, 49, 4, 49, 31]": {
+            "[:then, 22, 49, 4, 49, 31]": 46,
+            "[:else, 23, 49, 4, 49, 31]": 0
+          },
+          "[:\"&.\", 24, 53, 4, 53, 32]": {
+            "[:then, 25, 53, 4, 53, 32]": 202,
+            "[:else, 26, 53, 4, 53, 32]": 0
+          }
+        }
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/controllers/reflections_controller.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          1,
+          9,
+          9,
+          9,
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          2,
+          1,
+          1,
+          null,
+          null,
+          0,
+          0,
+          0,
+          null,
+          null,
+          null,
+          null,
+          1,
+          0,
+          0,
+          0,
+          0,
+          null,
+          null,
+          null,
+          1,
+          0,
+          0,
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          null,
+          null
+        ],
+        "branches": {
+          "[:if, 0, 12, 4, 23, 7]": {
+            "[:then, 1, 13, 6, 17, 9]": 1,
+            "[:else, 2, 19, 6, 22, 9]": 0
+          }
+        }
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/controllers/milestones_controller.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          10,
+          10,
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          2,
+          1,
+          null,
+          null,
+          0,
+          0,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          0,
+          null,
+          null,
+          1,
+          0,
+          0,
+          null,
+          0,
+          null,
+          null,
+          null,
+          1,
+          0,
+          0,
+          null,
+          null,
+          1,
+          null,
+          1,
+          0,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "branches": {
+          "[:if, 0, 12, 4, 20, 7]": {
+            "[:then, 1, 13, 6, 16, 9]": 1,
+            "[:else, 2, 18, 6, 19, 48]": 0
+          },
+          "[:if, 3, 30, 4, 34, 7]": {
+            "[:then, 4, 31, 6, 31, 74]": 0,
+            "[:else, 5, 33, 6, 33, 49]": 0
+          }
+        }
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/controllers/dashboard_controller.rb": {
+        "lines": [
+          1,
+          1,
+          7,
+          2,
+          2,
+          2,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          2,
+          null,
+          2,
+          2,
+          null,
+          null,
+          2,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          8,
+          null,
+          null
+        ],
+        "branches": {
+          "[:if, 0, 3, 4, 7, 7]": {
+            "[:then, 1, 4, 6, 6, 53]": 2,
+            "[:else, 2, 3, 4, 7, 7]": 5
+          },
+          "[:unless, 3, 13, 4, 13, 34]": {
+            "[:else, 4, 13, 4, 13, 34]": 2,
+            "[:then, 5, 13, 4, 13, 13]": 0
+          },
+          "[:if, 6, 27, 4, 27, 47]": {
+            "[:then, 7, 27, 18, 27, 19]": 0,
+            "[:else, 8, 27, 22, 27, 47]": 8
+          }
+        }
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/controllers/insights_controller.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          1,
+          2,
+          null,
+          2,
+          2,
+          2,
+          7,
+          null,
+          null,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          null,
+          2,
+          1,
+          null,
+          1,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          1,
+          null,
+          null
+        ],
+        "branches": {
+          "[:\"&.\", 0, 13, 26, 13, 76]": {
+            "[:then, 1, 13, 26, 13, 76]": 2,
+            "[:else, 2, 13, 26, 13, 76]": 0
+          },
+          "[:if, 3, 17, 26, 18, 84]": {
+            "[:then, 4, 17, 50, 17, 51]": 1,
+            "[:else, 5, 18, 26, 18, 84]": 1
+          },
+          "[:if, 6, 20, 16, 24, 7]": {
+            "[:then, 7, 21, 6, 21, 19]": 1,
+            "[:else, 8, 23, 6, 23, 8]": 1
+          },
+          "[:while, 9, 32, 4, 35, 7]": {
+            "[:body, 10, 33, 6, 34, 28]": 1
+          }
+        }
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/channels/application_cable/channel.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/channels/application_cable/connection.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/jobs/application_job.rb": {
+        "lines": [
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/mailers/application_mailer.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      }
+    },
+    "timestamp": 1772649116
+  },
+  "Unit Tests": {
+    "coverage": {
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/models/milestone.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          null,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          1,
+          null,
+          9,
+          3,
+          null,
+          1,
+          182,
+          null,
+          null,
+          1,
+          0,
+          null,
+          null,
+          178,
+          1,
+          1,
+          null
+        ],
+        "branches": {}
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/models/application_record.rb": {
+        "lines": [
+          1,
+          1,
+          null
+        ],
+        "branches": {}
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/models/reflection.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          null,
+          11,
+          null,
+          1,
+          0,
+          null,
+          null,
+          1,
+          0,
+          null,
+          null
+        ],
+        "branches": {}
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/models/relationship.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          111,
+          23,
+          null,
+          1,
+          1,
+          null,
+          1,
+          1,
+          1,
+          null,
+          1,
+          1,
+          null,
+          1,
+          11,
+          225,
+          164,
+          null,
+          1,
+          0,
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          40,
+          40,
+          40,
+          40,
+          2,
+          5,
+          33,
+          null,
+          null,
+          null,
+          1,
+          2,
+          null,
+          null
+        ],
+        "branches": {
+          "[:unless, 0, 44, 4, 44, 36]": {
+            "[:else, 1, 44, 4, 44, 36]": 40,
+            "[:then, 2, 44, 4, 44, 20]": 0
+          },
+          "[:case, 3, 47, 4, 51, 7]": {
+            "[:when, 4, 48, 23, 48, 37]": 2,
+            "[:when, 5, 49, 23, 49, 54]": 5,
+            "[:else, 6, 50, 23, 50, 57]": 33
+          }
+        }
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/controllers/relationships_controller.rb": {
+        "lines": [
+          1,
+          1,
+          0,
+          null,
+          null,
+          1,
+          3,
+          3,
+          2,
+          2,
+          null,
+          1,
+          null,
+          null,
+          null,
+          1,
+          38,
+          38,
+          null,
+          38,
+          38,
+          38,
+          null,
+          null,
+          1,
+          0,
+          0,
+          null,
+          null,
+          1,
+          0,
+          0,
+          0,
+          null,
+          null,
+          1,
+          null,
+          1,
+          3,
+          null,
+          null,
+          1,
+          38,
+          38,
+          38,
+          null,
+          null,
+          1,
+          38,
+          38,
+          38,
+          2,
+          2,
+          null,
+          38,
+          null,
+          null
+        ],
+        "branches": {
+          "[:if, 0, 8, 4, 13, 7]": {
+            "[:then, 1, 9, 6, 10, 66]": 2,
+            "[:else, 2, 12, 6, 12, 48]": 1
+          },
+          "[:if, 3, 44, 4, 44, 54]": {
+            "[:then, 4, 44, 4, 44, 34]": 2,
+            "[:else, 5, 44, 4, 44, 54]": 36
+          },
+          "[:while, 6, 51, 4, 54, 7]": {
+            "[:body, 7, 52, 6, 53, 28]": 2
+          }
+        }
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/controllers/application_controller.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          1,
+          null,
+          1,
+          null,
+          1,
+          70,
+          22,
+          48,
+          9,
+          null,
+          null,
+          0,
+          0,
+          null,
+          null,
+          1,
+          22,
+          null,
+          null
+        ],
+        "branches": {
+          "[:if, 0, 11, 4, 12, 57]": {
+            "[:then, 1, 12, 6, 12, 57]": 9,
+            "[:else, 2, 11, 4, 12, 57]": 39
+          },
+          "[:if, 3, 9, 20, 13, 7]": {
+            "[:then, 4, 10, 6, 10, 49]": 22,
+            "[:else, 5, 11, 4, 12, 57]": 48
+          },
+          "[:unless, 6, 20, 4, 20, 81]": {
+            "[:else, 7, 20, 4, 20, 81]": 22,
+            "[:then, 8, 20, 4, 20, 60]": 0
+          }
+        }
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/helpers/application_helper.rb": {
+        "lines": [
+          1,
+          null,
+          1,
+          null,
+          182,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          null,
+          178,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          116,
+          0,
+          0,
+          86,
+          30,
+          0,
+          null,
+          null,
+          null,
+          null,
+          1,
+          206,
+          206,
+          206,
+          0,
+          0,
+          0,
+          0,
+          null,
+          null,
+          1,
+          44,
+          null,
+          null,
+          1,
+          186,
+          null,
+          null
+        ],
+        "branches": {
+          "[:case, 0, 28, 4, 34, 7]": {
+            "[:when, 1, 29, 19, 29, 27]": 0,
+            "[:when, 2, 30, 19, 30, 29]": 0,
+            "[:when, 3, 31, 19, 31, 27]": 86,
+            "[:when, 4, 32, 20, 32, 29]": 30,
+            "[:else, 5, 33, 9, 33, 14]": 0
+          },
+          "[:unless, 6, 39, 4, 39, 28]": {
+            "[:else, 7, 39, 4, 39, 28]": 206,
+            "[:then, 8, 39, 4, 39, 16]": 0
+          },
+          "[:if, 9, 41, 4, 41, 52]": {
+            "[:then, 10, 41, 4, 41, 18]": 206,
+            "[:else, 11, 41, 4, 41, 52]": 0
+          },
+          "[:if, 12, 42, 4, 42, 52]": {
+            "[:then, 13, 42, 4, 42, 22]": 0,
+            "[:else, 14, 42, 4, 42, 52]": 0
+          },
+          "[:if, 15, 43, 4, 43, 52]": {
+            "[:then, 16, 43, 4, 43, 29]": 0,
+            "[:else, 17, 43, 4, 43, 52]": 0
+          },
+          "[:if, 18, 44, 4, 44, 60]": {
+            "[:then, 19, 44, 4, 44, 46]": 0,
+            "[:else, 20, 44, 4, 44, 60]": 0
+          },
+          "[:\"&.\", 21, 49, 4, 49, 31]": {
+            "[:then, 22, 49, 4, 49, 31]": 44,
+            "[:else, 23, 49, 4, 49, 31]": 0
+          },
+          "[:\"&.\", 24, 53, 4, 53, 32]": {
+            "[:then, 25, 53, 4, 53, 32]": 186,
+            "[:else, 26, 53, 4, 53, 32]": 0
+          }
+        }
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/controllers/reflections_controller.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          1,
+          8,
+          8,
+          8,
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          null,
+          0,
+          0,
+          0,
+          null,
+          null,
+          null,
+          null,
+          1,
+          0,
+          0,
+          0,
+          0,
+          null,
+          null,
+          null,
+          1,
+          0,
+          0,
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          null,
+          null
+        ],
+        "branches": {
+          "[:if, 0, 12, 4, 23, 7]": {
+            "[:then, 1, 13, 6, 17, 9]": 1,
+            "[:else, 2, 19, 6, 22, 9]": 0
+          }
+        }
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/controllers/insights_controller.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          1,
+          2,
+          null,
+          2,
+          2,
+          2,
+          6,
+          null,
+          null,
+          2,
+          2,
+          2,
+          2,
+          2,
+          1,
+          null,
+          2,
+          1,
+          null,
+          1,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          1,
+          null,
+          null
+        ],
+        "branches": {
+          "[:\"&.\", 0, 13, 26, 13, 76]": {
+            "[:then, 1, 13, 26, 13, 76]": 1,
+            "[:else, 2, 13, 26, 13, 76]": 1
+          },
+          "[:if, 3, 17, 26, 18, 84]": {
+            "[:then, 4, 17, 50, 17, 51]": 1,
+            "[:else, 5, 18, 26, 18, 84]": 1
+          },
+          "[:if, 6, 20, 16, 24, 7]": {
+            "[:then, 7, 21, 6, 21, 19]": 1,
+            "[:else, 8, 23, 6, 23, 8]": 1
+          },
+          "[:while, 9, 32, 4, 35, 7]": {
+            "[:body, 10, 33, 6, 34, 28]": 1
+          }
+        }
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/controllers/dashboard_controller.rb": {
+        "lines": [
+          1,
+          1,
+          7,
+          2,
+          2,
+          2,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          2,
+          null,
+          2,
+          2,
+          null,
+          null,
+          2,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          1,
+          8,
+          null,
+          null
+        ],
+        "branches": {
+          "[:if, 0, 3, 4, 7, 7]": {
+            "[:then, 1, 4, 6, 6, 53]": 2,
+            "[:else, 2, 3, 4, 7, 7]": 5
+          },
+          "[:unless, 3, 13, 4, 13, 34]": {
+            "[:else, 4, 13, 4, 13, 34]": 2,
+            "[:then, 5, 13, 4, 13, 13]": 0
+          },
+          "[:if, 6, 27, 4, 27, 47]": {
+            "[:then, 7, 27, 18, 27, 19]": 0,
+            "[:else, 8, 27, 22, 27, 47]": 8
+          }
+        }
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/controllers/milestones_controller.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null,
+          1,
+          10,
+          10,
+          null,
+          null,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          null,
+          null,
+          0,
+          0,
+          null,
+          null,
+          null,
+          1,
+          null,
+          1,
+          0,
+          null,
+          null,
+          1,
+          0,
+          0,
+          null,
+          0,
+          null,
+          null,
+          null,
+          1,
+          0,
+          0,
+          null,
+          null,
+          1,
+          null,
+          1,
+          0,
+          null,
+          null,
+          1,
+          1,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "branches": {
+          "[:if, 0, 12, 4, 20, 7]": {
+            "[:then, 1, 13, 6, 16, 9]": 1,
+            "[:else, 2, 18, 6, 19, 48]": 0
+          },
+          "[:if, 3, 30, 4, 34, 7]": {
+            "[:then, 4, 31, 6, 31, 74]": 0,
+            "[:else, 5, 33, 6, 33, 49]": 0
+          }
+        }
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/channels/application_cable/channel.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/channels/application_cable/connection.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/jobs/application_job.rb": {
+        "lines": [
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          0
+        ],
+        "branches": {}
+      },
+      "/Users/merigogichashvili/practice-projects/relationshipmilestones/app/mailers/application_mailer.rb": {
+        "lines": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
+      }
+    },
+    "timestamp": 1772647575
+  }
+}

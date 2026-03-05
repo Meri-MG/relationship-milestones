@@ -59,4 +59,8 @@ group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem "capybara"
   gem "selenium-webdriver"
+  # Code coverage
+  gem "simplecov", require: false
+  # Restore assigns/assert_template for controller tests
+  gem "rails-controller-testing"
 end

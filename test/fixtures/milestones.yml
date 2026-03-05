@@ -1,0 +1,73 @@
+first_meeting:
+  relationship: active_couple
+  title: "The night we first talked"
+  occurred_on: "2024-06-15"
+  milestone_type: first
+  description: "We talked for hours."
+  my_perspective: "I was nervous."
+  emotional_intensity: 7
+
+funny_threshold:
+  relationship: active_couple
+  title: "The map joke"
+  occurred_on: "2024-07-01"
+  milestone_type: funny
+  description: "Now a running joke."
+  emotional_intensity: 3
+
+conflict_one:
+  relationship: active_couple
+  title: "First real argument"
+  occurred_on: "2024-08-01"
+  milestone_type: conflict
+  description: "A difficult evening."
+  repair_notes: "We spoke the next morning."
+  partner_perspective: "She felt unheard."
+  emotional_intensity: 9
+
+conflict_no_repair:
+  relationship: active_couple
+  title: "Second argument"
+  occurred_on: "2024-09-01"
+  milestone_type: conflict
+  description: "Another hard moment."
+  emotional_intensity: 8
+
+growth_one:
+  relationship: active_couple
+  title: "Understanding her rhythm"
+  occurred_on: "2024-09-15"
+  milestone_type: growth
+  description: "A shift in understanding."
+  emotional_intensity: 5
+
+transition_one:
+  relationship: active_couple
+  title: "Moving in together"
+  occurred_on: "2024-10-01"
+  milestone_type: transition
+  description: "Big change."
+  emotional_intensity: 7
+
+ending_milestone:
+  relationship: ended_chapter
+  title: "Chapter closed"
+  occurred_on: "2023-12-31"
+  milestone_type: ending
+  description: "This chapter has come to an end."
+  emotional_intensity: 5
+
+custom_one:
+  relationship: active_solo
+  title: "A quiet Sunday"
+  occurred_on: "2024-03-10"
+  milestone_type: custom
+  description: "Something personal."
+  emotional_intensity: 4
+
+child_chapter_milestone:
+  relationship: child_chapter
+  title: "A new beginning"
+  occurred_on: "2024-02-15"
+  milestone_type: growth
+  emotional_intensity: 6

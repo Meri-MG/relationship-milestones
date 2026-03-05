@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -ex
+rm -rf tmp/storage
+bundle exec rails db:migrate:reset db:fixtures:load
+RAILS_ENV=test bundle exec rails db:schema:load db:fixtures:load

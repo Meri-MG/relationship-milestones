@@ -10,8 +10,56 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 0) do
+ActiveRecord::Schema[7.2].define(version: 2026_03_04_000003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "milestones", force: :cascade do |t|
+    t.bigint "relationship_id", null: false
+    t.string "title", null: false
+    t.date "occurred_on", null: false
+    t.string "milestone_type", default: "custom", null: false
+    t.text "description"
+    t.text "my_perspective"
+    t.text "partner_perspective"
+    t.text "repair_notes"
+    t.string "emotional_tags", default: [], array: true
+    t.integer "emotional_intensity", default: 5
+    t.string "photo_filename"
+    t.boolean "awaiting_confirmation", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["milestone_type"], name: "index_milestones_on_milestone_type"
+    t.index ["occurred_on"], name: "index_milestones_on_occurred_on"
+    t.index ["relationship_id"], name: "index_milestones_on_relationship_id"
+  end
+
+  create_table "reflections", force: :cascade do |t|
+    t.bigint "relationship_id", null: false
+    t.string "prompt_type"
+    t.text "content"
+    t.boolean "private_note", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at"], name: "index_reflections_on_created_at"
+    t.index ["relationship_id"], name: "index_reflections_on_relationship_id"
+  end
+
+  create_table "relationships", force: :cascade do |t|
+    t.string "title", default: "Our Story", null: false
+    t.string "mode", default: "solo", null: false
+    t.string "status", default: "active", null: false
+    t.integer "chapter_number", default: 1, null: false
+    t.bigint "parent_chapter_id"
+    t.date "began_on"
+    t.date "ended_on"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_chapter_id"], name: "index_relationships_on_parent_chapter_id"
+    t.index ["status"], name: "index_relationships_on_status"
+  end
+
+  add_foreign_key "milestones", "relationships"
+  add_foreign_key "reflections", "relationships"
 end

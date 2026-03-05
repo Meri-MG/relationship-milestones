@@ -1,0 +1,351 @@
+<% content_for :title, "Dashboard — Relationship Milestones" %>
+
+<% if @relationship.nil? %>
+  <%# ── Onboarding — no relationship yet ──────────────────── %>
+  <div class="min-h-screen flex items-center justify-center p-8">
+    <div class="max-w-md w-full flex flex-col gap-10 animate-fade-in">
+      <div class="flex flex-col gap-3">
+        <h1 class="font-serif text-display text-ink-800 leading-tight text-balance">
+          A space for your story.
+        </h1>
+        <p class="text-body text-ink-500 leading-relaxed max-w-prose-sm">
+          Document the moments that shaped this chapter — calmly, privately, without judgment.
+        </p>
+      </div>
+
+      <div class="card p-8 flex flex-col gap-6">
+        <%= form_with model: Relationship.new, url: relationships_path, local: true do |f| %>
+          <div class="form-group">
+            <%= f.label :title, "Give this chapter a name", class: "label" %>
+            <%= f.text_field :title,
+                  placeholder: 'e.g. "Our story" or leave it simple',
+                  class: "input",
+                  autofocus: true %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :mode, "Who is keeping this archive?", class: "label" %>
+            <div class="flex gap-3">
+              <label class="flex-1 flex items-center gap-3 p-3.5 rounded border border-warm-300 cursor-pointer
+                            has-[:checked]:border-sage-400 has-[:checked]:bg-sage-50 transition-colors duration-150">
+                <%= f.radio_button :mode, "solo", class: "sr-only", checked: true %>
+                <span class="w-2 h-2 rounded-full bg-ink-300 peer-checked:bg-sage-500 shrink-0"></span>
+                <span class="flex flex-col gap-0.5">
+                  <span class="text-small font-medium text-ink-700">Solo</span>
+                  <span class="text-micro text-ink-400">Private reflection</span>
+                </span>
+              </label>
+              <label class="flex-1 flex items-center gap-3 p-3.5 rounded border border-warm-300 cursor-pointer
+                            has-[:checked]:border-sage-400 has-[:checked]:bg-sage-50 transition-colors duration-150">
+                <%= f.radio_button :mode, "couple", class: "sr-only" %>
+                <span class="w-2 h-2 rounded-full bg-ink-300 shrink-0"></span>
+                <span class="flex flex-col gap-0.5">
+                  <span class="text-small font-medium text-ink-700">Together</span>
+                  <span class="text-micro text-ink-400">Shared space</span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :began_on, "When did this begin?", class: "label" %>
+            <%= f.date_field :began_on, class: "input", value: Date.today %>
+          </div>
+
+          <%= f.submit "Begin this chapter",
+                class: "btn-primary btn-lg w-full justify-center mt-2" %>
+        <% end %>
+      </div>
+
+      <p class="text-micro text-ink-400 text-center">
+        Your archive is private. Nothing is shared without your consent.
+      </p>
+    </div>
+  </div>
+
+<% else %>
+  <%# ── Dashboard — has relationship ──────────────────────── %>
+  <div class="px-8 py-10 max-w-wide mx-auto flex flex-col gap-10 animate-fade-in">
+
+    <%# Header %>
+    <div class="flex items-start justify-between gap-6">
+      <div class="flex flex-col gap-2">
+        <div class="flex items-center gap-3">
+          <% if @relationship.ended? %>
+            <span class="tag tag-warm">Ended</span>
+          <% else %>
+            <span class="tag tag-sage">Active</span>
+          <% end %>
+          <% if @relationship.chapter_number > 1 %>
+            <span class="text-micro text-ink-400">Chapter <%= @relationship.chapter_number %></span>
+          <% end %>
+        </div>
+        <h1 class="font-serif text-display text-ink-800 leading-tight">
+          <%= @relationship.title %>
+        </h1>
+        <% if @relationship.began_on %>
+          <p class="text-small text-ink-400">
+            Since <%= format_date_long(@relationship.began_on) %>
+            <% if @relationship.began_on %>
+              &middot; <%= @relationship.duration_label %>
+            <% end %>
+          </p>
+        <% end %>
+      </div>
+
+      <% if @relationship.active? %>
+        <div class="flex items-center gap-2 shrink-0">
+          <%= link_to new_relationship_milestone_path(@relationship),
+                class: "btn-primary",
+                data: { turbo_frame: "modal" } do %>
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Add milestone
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <%# Emotional summary bar %>
+    <div class="card p-6 flex flex-col gap-5">
+      <div class="flex items-center justify-between">
+        <h2 class="text-title text-ink-700">Emotional overview</h2>
+        <span class="text-micro text-ink-400"><%= @relationship.milestones.count %> moments recorded</span>
+      </div>
+
+      <% if @emotional_summary.values.all?(&:zero?) %>
+        <p class="text-small text-ink-400 italic py-4 text-center">
+          No milestones yet. Begin by adding your first moment.
+        </p>
+      <% else %>
+        <div class="flex flex-col gap-4">
+          <% {
+               joy:       { label: "Joy & humor",  color: "bg-warm-300" },
+               growth:    { label: "Growth",       color: "bg-sage-300" },
+               tension:   { label: "Tension",      color: "bg-rose-300" },
+               stability: { label: "Transitions",  color: "bg-slate-300" },
+             }.each do |key, cfg| %>
+            <div class="flex items-center gap-4">
+              <span class="text-small text-ink-500 w-28 shrink-0"><%= cfg[:label] %></span>
+              <div class="flex-1 h-1.5 bg-warm-100 rounded-full overflow-hidden">
+                <div class="h-full <%= cfg[:color] %> rounded-full transition-all duration-700"
+                     style="width: <%= @emotional_summary[key] || 0 %>%"></div>
+              </div>
+              <span class="text-micro text-ink-400 w-8 text-right">
+                <%= @emotional_summary[key] || 0 %>%
+              </span>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <%# Content grid %>
+    <div class="grid grid-cols-3 gap-6">
+
+      <%# Recent milestones %>
+      <div class="col-span-2 flex flex-col gap-4">
+        <div class="flex items-center justify-between">
+          <h2 class="text-title text-ink-700">Recent moments</h2>
+          <%= link_to "View timeline", relationship_path(@relationship),
+                class: "text-small text-ink-400 hover:text-ink-700 transition-colors" %>
+        </div>
+
+        <% if @recent_milestones.empty? %>
+          <div class="card-soft p-8 text-center flex flex-col items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-warm-200 flex items-center justify-center">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" class="text-ink-400">
+                <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <p class="text-small text-ink-400">
+              Your first milestone is waiting to be recorded.
+            </p>
+            <%= link_to "Add your first moment",
+                  new_relationship_milestone_path(@relationship),
+                  class: "text-small text-sage-600 hover:text-sage-700 transition-colors" %>
+          </div>
+        <% else %>
+          <div class="flex flex-col gap-3">
+            <% @recent_milestones.each do |milestone| %>
+              <%= link_to relationship_milestone_path(@relationship, milestone),
+                    class: "card-hover p-5 flex flex-col gap-2 group" do %>
+                <div class="flex items-center justify-between">
+                  <span class="tag <%= milestone_type_bg(milestone.milestone_type) %>">
+                    <%= milestone.type_label %>
+                  </span>
+                  <span class="text-micro text-ink-400">
+                    <%= format_date_short(milestone.occurred_on) %>
+                  </span>
+                </div>
+                <p class="text-small font-medium text-ink-800 group-hover:text-ink-900">
+                  <%= milestone.title %>
+                </p>
+                <% if milestone.description.present? %>
+                  <p class="text-small text-ink-400 line-clamp-2 leading-relaxed">
+                    <%= milestone.description %>
+                  </p>
+                <% end %>
+                <% if milestone.emotional_tags.present? %>
+                  <div class="flex flex-wrap gap-1.5 mt-1">
+                    <% milestone.emotional_tags.each do |tag| %>
+                      <span class="tag-warm"><%= tag %></span>
+                    <% end %>
+                  </div>
+                <% end %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      <%# Right sidebar — reflection preview + quick actions %>
+      <div class="flex flex-col gap-4">
+
+        <%# Soft insight %>
+        <div class="card-soft p-5 flex flex-col gap-3 border-l-2 border-sage-200">
+          <span class="insight-label">This chapter</span>
+          <% if @relationship.milestones.count > 0 %>
+            <p class="text-small text-ink-600 leading-relaxed">
+              <% most_common = @relationship.emotional_heatmap.max_by { |_, v| v } %>
+              <% if most_common %>
+                The most frequent theme has been
+                <strong class="font-medium"><%= most_common[0] %></strong> moments.
+              <% end %>
+            </p>
+          <% else %>
+            <p class="text-small text-ink-400 leading-relaxed italic">
+              Your story is still forming.
+            </p>
+          <% end %>
+        </div>
+
+        <%# Latest reflection %>
+        <div class="card p-5 flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-small font-medium text-ink-700">Latest reflection</h3>
+            <%= link_to "All", relationship_reflections_path(@relationship),
+                  class: "text-micro text-ink-400 hover:text-ink-600 transition-colors" %>
+          </div>
+
+          <% if @latest_reflection&.content.present? %>
+            <p class="text-small text-ink-500 leading-relaxed line-clamp-4 italic">
+              "<%= @latest_reflection.content %>"
+            </p>
+            <span class="text-micro text-ink-400">
+              <%= time_ago_label(@latest_reflection.created_at) %>
+            </span>
+          <% else %>
+            <p class="text-small text-ink-400 italic">No reflections yet.</p>
+            <%= link_to "Begin reflecting",
+                  relationship_reflections_path(@relationship),
+                  class: "text-small text-sage-600 hover:text-sage-700 transition-colors" %>
+          <% end %>
+        </div>
+
+        <%# Quick actions %>
+        <% if @relationship.active? %>
+          <div class="flex flex-col gap-2">
+            <%= link_to relationship_path(@relationship),
+                  class: "btn-secondary w-full justify-center" do %>
+              View full timeline
+            <% end %>
+            <%= link_to relationship_insights_path(@relationship),
+                  class: "btn-ghost w-full justify-center" do %>
+              View insights
+            <% end %>
+          </div>
+        <% end %>
+
+        <%# End chapter CTA (subtle) %>
+        <% if @relationship.active? %>
+          <div class="pt-2">
+            <button
+              class="text-micro text-ink-300 hover:text-rose-400 transition-colors duration-200 w-full text-center"
+              data-controller="modal"
+              data-action="click->modal#open"
+              data-modal-target-value="end-chapter-modal">
+              End this chapter
+            </button>
+          </div>
+        <% end %>
+
+        <%# Reconciliation CTA %>
+        <% if @relationship.ended? %>
+          <div class="card-soft p-5 flex flex-col gap-3">
+            <p class="text-small text-ink-500 leading-relaxed">
+              This chapter has come to an end.
+            </p>
+            <button
+              class="btn-secondary w-full justify-center"
+              data-controller="modal"
+              data-action="click->modal#open"
+              data-modal-target-value="new-chapter-modal">
+              Begin a new chapter?
+            </button>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+
+  <%# ── End chapter modal ─────────────────────────────────── %>
+  <div id="end-chapter-modal" class="modal-backdrop hidden" data-controller="modal" data-modal-closeable>
+    <div class="modal-panel-sm">
+      <div class="p-8 flex flex-col gap-6">
+        <div class="flex flex-col gap-2">
+          <h2 class="font-serif text-heading text-ink-800">End this chapter?</h2>
+          <p class="text-small text-ink-500 leading-relaxed">
+            This will close this part of your journey.
+            Your memories remain safe and the timeline will be preserved.
+          </p>
+        </div>
+        <div class="divider"></div>
+        <div class="flex flex-col gap-3">
+          <%= button_to "Close this chapter",
+                end_chapter_relationship_path(@relationship),
+                method: :patch,
+                class: "btn-danger w-full justify-center" %>
+          <button onclick="document.getElementById('end-chapter-modal').classList.add('hidden')"
+                  class="btn-ghost w-full justify-center">
+            Not yet
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# ── New chapter modal ──────────────────────────────────── %>
+  <% if @relationship.ended? %>
+    <div id="new-chapter-modal" class="modal-backdrop hidden" data-controller="modal" data-modal-closeable>
+      <div class="modal-panel-sm">
+        <div class="p-8 flex flex-col gap-6">
+          <div class="flex flex-col gap-2">
+            <h2 class="font-serif text-heading text-ink-800">Begin a new chapter?</h2>
+            <p class="text-small text-ink-500 leading-relaxed">
+              If you are choosing each other again, you can begin a new chapter
+              while keeping your shared history intact.
+            </p>
+          </div>
+          <div class="card-soft p-4 flex flex-col gap-2">
+            <p class="text-micro text-ink-400">Your previous chapter will be archived, not deleted.</p>
+          </div>
+          <div class="divider"></div>
+          <div class="flex flex-col gap-3">
+            <%= button_to "Begin a new chapter",
+                  new_chapter_relationship_path(@relationship),
+                  method: :post,
+                  class: "btn-primary w-full justify-center" %>
+            <button onclick="document.getElementById('new-chapter-modal').classList.add('hidden')"
+                    class="btn-ghost w-full justify-center">
+              Keep archived
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+<% end %>

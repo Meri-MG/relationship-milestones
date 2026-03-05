@@ -1,0 +1,29 @@
+active_solo:
+  title: "My Solo Story"
+  mode: solo
+  status: active
+  chapter_number: 1
+  began_on: "2024-01-01"
+
+active_couple:
+  title: "Our Story Together"
+  mode: couple
+  status: active
+  chapter_number: 1
+  began_on: "2024-06-01"
+
+ended_chapter:
+  title: "A Past Chapter"
+  mode: solo
+  status: ended
+  chapter_number: 1
+  began_on: "2023-01-01"
+  ended_on: "2023-12-31"
+
+child_chapter:
+  title: "New Beginning"
+  mode: solo
+  status: active
+  chapter_number: 2
+  began_on: "2024-02-01"
+  parent_chapter_id: <%= ActiveRecord::FixtureSet.identify(:ended_chapter) %>

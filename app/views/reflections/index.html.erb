@@ -1,0 +1,164 @@
+<% content_for :title, "Reflections — #{@relationship.title}" %>
+
+<div class="px-8 py-10 max-w-content mx-auto flex flex-col gap-10 animate-fade-in">
+
+  <%# Header %>
+  <div class="flex flex-col gap-2">
+    <p class="text-micro text-ink-400 tracking-widest uppercase">Reflections</p>
+    <h1 class="font-serif text-display text-ink-800 leading-tight">
+      Sit with it.
+    </h1>
+    <p class="text-small text-ink-400 leading-relaxed max-w-prose-sm">
+      No pressure to be articulate. These words are only for you.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-3 gap-8">
+
+    <%# ── Writing area (left / main) ──────────────────── %>
+    <div class="col-span-2 flex flex-col gap-6">
+
+      <%# Active prompt cards %>
+      <div class="flex flex-col gap-3" data-controller="reflection-prompt">
+        <% Reflection::PROMPTS.each do |key, question| %>
+          <% next if question.nil? %>
+          <div class="card group cursor-pointer transition-all duration-200 hover:shadow-card-md"
+               data-action="click->reflection-prompt#activate"
+               data-reflection-prompt-key-param="<%= key %>"
+               data-reflection-prompt-question-param="<%= question %>"
+               data-reflection-prompt-target="card"
+               data-key="<%= key %>">
+            <div class="p-5 flex items-start gap-4">
+              <div class="w-1 self-stretch rounded-full bg-warm-200 group-hover:bg-sage-200 transition-colors duration-200 shrink-0"></div>
+              <div class="flex-1 flex flex-col gap-1">
+                <p class="text-small text-ink-700 leading-relaxed font-medium">
+                  <%= question %>
+                </p>
+                <%# Show excerpt if answered %>
+                <% existing = @reflections.find { |r| r.prompt_type == key } %>
+                <% if existing&.content.present? %>
+                  <p class="text-small text-ink-400 italic line-clamp-2 leading-relaxed mt-1">
+                    "<%= existing.content %>"
+                  </p>
+                  <span class="text-micro text-ink-300">
+                    Last updated <%= time_ago_label(existing.updated_at) %>
+                  </span>
+                <% end %>
+              </div>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"
+                   class="text-ink-300 group-hover:text-ink-600 transition-colors shrink-0 mt-0.5">
+                <path d="M3 5l4 4 4-4" stroke="currentColor" stroke-width="1.2"
+                      stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+
+            <%# Inline writing area (hidden until activated) %>
+            <div class="hidden border-t border-warm-100"
+                 data-reflection-prompt-target="editor"
+                 data-key="<%= key %>">
+              <div class="p-5 pt-4 flex flex-col gap-3">
+                <%= form_with url: relationship_reflections_path(@relationship),
+                      local: false,
+                      data: {
+                        controller: "autosave",
+                        autosave_url_value: relationship_reflections_path(@relationship),
+                        autosave_reflection_id_value: existing&.id,
+                        reflection_prompt_target: "form",
+                        key: key
+                      } do |f| %>
+                  <%= hidden_field_tag "reflection[prompt_type]", key %>
+                  <%= f.text_area :content,
+                        rows: 5,
+                        value: existing&.content,
+                        placeholder: question,
+                        class: "textarea w-full font-serif text-small leading-relaxed border-0 bg-warm-50 p-3 rounded focus:ring-1 focus:ring-sage-200",
+                        data: {
+                          autosave_target: "field",
+                          action: "input->autosave#scheduleSave"
+                        } %>
+                  <div class="flex items-center justify-between">
+                    <span class="text-micro text-ink-300"
+                          data-autosave-target="status">
+                      <%# autosaved indicator %>
+                    </span>
+                    <button type="button"
+                            class="text-micro text-ink-400 hover:text-ink-700 transition-colors"
+                            data-action="click->reflection-prompt#collapse"
+                            data-reflection-prompt-key-param="<%= key %>">
+                      Done
+                    </button>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <%# Open / free-form reflection %>
+        <div class="card-soft p-1 flex flex-col gap-0">
+          <div class="p-5 flex flex-col gap-3">
+            <p class="text-small text-ink-500 italic">Or write freely.</p>
+            <%= form_with model: [@relationship, @reflection],
+                  url: relationship_reflections_path(@relationship),
+                  data: { turbo: false } do |f| %>
+              <%= hidden_field_tag "reflection[prompt_type]", "open" %>
+              <%= f.text_area :content,
+                    rows: 4,
+                    placeholder: "What's on your mind?",
+                    class: "textarea w-full font-serif text-small leading-relaxed" %>
+              <div class="flex justify-end">
+                <%= f.submit "Save",
+                      class: "btn-secondary btn-sm" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <%# ── Sidebar — past reflections ──────────────────── %>
+    <div class="flex flex-col gap-4">
+      <h2 class="text-small font-medium text-ink-600">Past reflections</h2>
+
+      <% open_reflections = @reflections.select { |r| r.prompt_type == "open" || r.prompt_type.nil? } %>
+      <% if open_reflections.empty? %>
+        <p class="text-small text-ink-400 italic">Nothing saved yet.</p>
+      <% else %>
+        <div class="flex flex-col gap-3">
+          <% open_reflections.each do |reflection| %>
+            <div class="card p-4 flex flex-col gap-2 group">
+              <p class="text-small text-ink-600 leading-relaxed italic line-clamp-4">
+                "<%= reflection.content %>"
+              </p>
+              <div class="flex items-center justify-between">
+                <span class="text-micro text-ink-400">
+                  <%= time_ago_label(reflection.created_at) %>
+                </span>
+                <%= button_to relationship_reflection_path(@relationship, reflection),
+                      { method: :delete,
+                        class: "opacity-0 group-hover:opacity-100 btn-icon text-ink-300 hover:text-rose-400 transition-all p-1",
+                        title: "Remove",
+                        data: { turbo_confirm: "Remove this reflection?" } } do %>
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M1.5 1.5l9 9M10.5 1.5l-9 9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                  </svg>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+      <%# Unlocked prompts note if ended %>
+      <% if @relationship.ended? %>
+        <div class="card-soft p-4 flex flex-col gap-2 border-l-2 border-slate-200 mt-4">
+          <span class="text-micro text-slate-500 uppercase tracking-widest">Chapter ended</span>
+          <p class="text-small text-ink-500 leading-relaxed">
+            Reflection prompts are fully open. Take the time you need.
+          </p>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</div>
