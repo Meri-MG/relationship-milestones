@@ -167,6 +167,7 @@ GEM
     parser (3.3.10.2)
       ast (~> 2.4.1)
       racc
+    pg (1.6.3-aarch64-linux)
     pg (1.6.3-x86_64-darwin)
     pg (1.6.3-x86_64-linux)
     pp (0.6.3)
@@ -291,6 +292,7 @@ GEM
     tailwindcss-rails (4.4.0)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
+    tailwindcss-ruby (4.2.0-aarch64-linux)
     tailwindcss-ruby (4.2.0-x86_64-darwin)
     tailwindcss-ruby (4.2.0-x86_64-linux)
     thor (1.5.0)
@@ -320,6 +322,7 @@ GEM
     zeitwerk (2.6.18)
 
 PLATFORMS
+  aarch64-linux
   x86_64-darwin-19
   x86_64-linux
 
