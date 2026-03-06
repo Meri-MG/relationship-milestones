@@ -1,0 +1,210 @@
+<% content_for :title, "Insights — #{@relationship.title}" %>
+
+<div class="px-8 py-10 max-w-wide mx-auto flex flex-col gap-10 animate-fade-in">
+
+  <%# Header %>
+  <div class="flex flex-col gap-2">
+    <p class="text-micro text-ink-400 tracking-widest uppercase">Insights</p>
+    <h1 class="font-serif text-display text-ink-800 leading-tight">What the pattern shows.</h1>
+    <p class="text-small text-ink-400 leading-relaxed">
+      Observations only. No scores. No conclusions drawn for you.
+    </p>
+  </div>
+
+  <% if @total_milestones == 0 %>
+    <div class="card-soft p-12 text-center flex flex-col items-center gap-4">
+      <p class="text-body text-ink-400">No milestones recorded yet.</p>
+      <%= link_to "Add your first milestone",
+            new_relationship_milestone_path(@relationship),
+            class: "btn-secondary" %>
+    </div>
+  <% else %>
+
+    <%# ── Stat cards ─────────────────────────────────────── %>
+    <div class="grid grid-cols-4 gap-4">
+      <div class="insight-card">
+        <span class="insight-label">Total moments</span>
+        <span class="font-serif text-display text-ink-800"><%= @total_milestones %></span>
+        <p class="text-small text-ink-400">recorded in this chapter</p>
+      </div>
+
+      <div class="insight-card">
+        <span class="insight-label">Avg. intensity</span>
+        <span class="font-serif text-display text-ink-800">
+          <%= @avg_intensity || "–" %>
+          <span class="text-body font-sans text-ink-400">/10</span>
+        </span>
+        <p class="text-small text-ink-400">emotional intensity across moments</p>
+      </div>
+
+      <div class="insight-card">
+        <span class="insight-label">Repair rate</span>
+        <span class="font-serif text-display text-ink-800">
+          <%= @repair_rate %>
+          <span class="text-body font-sans text-ink-400">%</span>
+        </span>
+        <p class="text-small text-ink-400">of conflicts with repair notes</p>
+      </div>
+
+      <div class="insight-card">
+        <span class="insight-label">Growth moments</span>
+        <span class="font-serif text-display text-ink-800"><%= @growth_count %></span>
+        <p class="text-small text-ink-400">out of <%= @total_milestones %> total</p>
+      </div>
+    </div>
+
+    <%# ── Breakdown by type ──────────────────────────────── %>
+    <div class="grid grid-cols-2 gap-6">
+
+      <%# Type breakdown %>
+      <div class="card p-6 flex flex-col gap-5">
+        <h2 class="text-title text-ink-700">Moments by type</h2>
+        <div class="flex flex-col gap-4">
+          <% type_total = @by_type.values.sum.to_f %>
+          <% [
+               ["first",      "Firsts",       "bg-sage-200"],
+               ["funny",      "Funny",        "bg-warm-300"],
+               ["conflict",   "Conflict",     "bg-rose-200"],
+               ["growth",     "Growth",       "bg-sage-300"],
+               ["transition", "Transitions",  "bg-slate-200"],
+               ["custom",     "Custom",       "bg-warm-200"],
+               ["ending",     "Endings",      "bg-warm-400"],
+             ].each do |type, label, color_class| %>
+            <% count = @by_type[type] || 0 %>
+            <% next if count == 0 %>
+            <div class="flex items-center gap-3">
+              <span class="text-small text-ink-500 w-24 shrink-0"><%= label %></span>
+              <div class="flex-1 h-2 bg-warm-100 rounded-full overflow-hidden">
+                <div class="h-full <%= color_class %> rounded-full"
+                     style="width: <%= type_total.zero? ? 0 : (count / type_total * 100).round %>%"></div>
+              </div>
+              <span class="text-micro text-ink-400 w-5 text-right"><%= count %></span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <%# Emotional heatmap — monthly activity %>
+      <div class="card p-6 flex flex-col gap-5">
+        <h2 class="text-title text-ink-700">Activity over time</h2>
+        <% if @monthly_activity.empty? %>
+          <p class="text-small text-ink-400 italic">No data yet.</p>
+        <% else %>
+          <div class="flex flex-col gap-3">
+            <% max_count = @monthly_activity.values.max.to_f %>
+            <% @monthly_activity.to_a.last(12).each do |month, count| %>
+              <div class="flex items-center gap-3">
+                <span class="text-micro text-ink-400 w-20 shrink-0">
+                  <%= month.strftime("%b %Y") %>
+                </span>
+                <div class="flex-1 flex items-center gap-1">
+                  <div class="h-5 rounded-sm bg-sage-200 transition-all duration-500"
+                       style="width: <%= max_count.zero? ? 0 : (count / max_count * 100).round %>%; min-width: 4px;"></div>
+                  <span class="text-micro text-ink-400 ml-1"><%= count %></span>
+                </div>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <%# ── Observational notes ────────────────────────────── %>
+    <div class="card p-7 flex flex-col gap-5">
+      <h2 class="text-title text-ink-700">What the data shows</h2>
+      <div class="grid grid-cols-2 gap-4">
+        <% if @conflict_count > 0 %>
+          <div class="card-soft p-4 flex flex-col gap-1.5">
+            <span class="text-micro text-ink-400 uppercase tracking-widest">Conflict</span>
+            <p class="text-small text-ink-600 leading-relaxed">
+              <% if @repair_rate >= 80 %>
+                Repair notes were added to most conflict moments.
+              <% elsif @repair_rate >= 40 %>
+                About half of conflicts have repair notes.
+              <% else %>
+                Conflict moments without repair notes: <%= @conflict_count - @repair_notes_count %>.
+              <% end %>
+            </p>
+          </div>
+        <% end %>
+
+        <% if @growth_count > 0 %>
+          <div class="card-soft p-4 flex flex-col gap-1.5">
+            <span class="text-micro text-ink-400 uppercase tracking-widest">Growth</span>
+            <p class="text-small text-ink-600 leading-relaxed">
+              Growth was documented <%= @growth_count %> time<%= @growth_count == 1 ? "" : "s" %>.
+              <% ratio = @total_milestones.zero? ? 0 : ((@growth_count.to_f / @total_milestones) * 100).round %>
+              That is <%= ratio %>% of all recorded moments.
+            </p>
+          </div>
+        <% end %>
+
+        <% intensity = @avg_intensity.to_f %>
+        <% if intensity > 0 %>
+          <div class="card-soft p-4 flex flex-col gap-1.5">
+            <span class="text-micro text-ink-400 uppercase tracking-widest">Intensity</span>
+            <p class="text-small text-ink-600 leading-relaxed">
+              <% if intensity <= 3 %>
+                Most moments were recorded with low emotional intensity.
+              <% elsif intensity <= 6 %>
+                Emotional intensity was moderate across most moments.
+              <% else %>
+                Moments tended toward high emotional intensity.
+              <% end %>
+            </p>
+          </div>
+        <% end %>
+
+        <% if @monthly_activity.size >= 3 %>
+          <div class="card-soft p-4 flex flex-col gap-1.5">
+            <span class="text-micro text-ink-400 uppercase tracking-widest">Pacing</span>
+            <p class="text-small text-ink-600 leading-relaxed">
+              Milestones were recorded across
+              <%= @monthly_activity.size %> month<%= @monthly_activity.size == 1 ? "" : "s" %>.
+              <% busiest = @monthly_activity.max_by { |_, v| v } %>
+              The most active month was <%= busiest[0].strftime("%B %Y") %>.
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <%# ── Multi-chapter comparison (if applicable) ───── %>
+    <% if @chapters.size > 1 %>
+      <div class="card p-7 flex flex-col gap-5">
+        <h2 class="text-title text-ink-700">Between chapters</h2>
+        <p class="text-small text-ink-400 mb-2">
+          You have documented <%= @chapters.size %> chapters. Here is a comparison.
+        </p>
+        <div class="flex flex-col gap-4">
+          <% @chapters.each do |ch| %>
+            <div class="flex items-start gap-5 py-4 border-b border-warm-100 last:border-b-0">
+              <div class="flex flex-col gap-0.5 w-36 shrink-0">
+                <span class="text-small font-medium text-ink-700">Chapter <%= ch.chapter_number %></span>
+                <span class="text-micro text-ink-400"><%= ch.duration_label %></span>
+                <span class="tag <%= ch.ended? ? 'tag-warm' : 'tag-sage' %> mt-1 w-fit">
+                  <%= ch.ended? ? "Archived" : "Active" %>
+                </span>
+              </div>
+              <div class="flex-1 grid grid-cols-3 gap-3">
+                <div class="flex flex-col gap-0.5">
+                  <span class="insight-label">Milestones</span>
+                  <span class="text-title text-ink-800"><%= ch.milestones.count %></span>
+                </div>
+                <div class="flex flex-col gap-0.5">
+                  <span class="insight-label">Conflicts</span>
+                  <span class="text-title text-ink-800"><%= ch.milestones.by_type("conflict").count %></span>
+                </div>
+                <div class="flex flex-col gap-0.5">
+                  <span class="insight-label">Growth</span>
+                  <span class="text-title text-ink-800"><%= ch.milestones.by_type("growth").count %></span>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+
+  <% end %>
+</div>

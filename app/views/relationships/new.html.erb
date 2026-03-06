@@ -1,0 +1,73 @@
+<% content_for :title, "Begin a chapter" %>
+<% content_for :full_page, true %>
+
+<div class="min-h-screen bg-warm-50 flex items-center justify-center p-8">
+  <div class="max-w-md w-full flex flex-col gap-10 animate-fade-in">
+    <div class="flex flex-col gap-3">
+      <div class="w-8 h-8 rounded bg-warm-200 flex items-center justify-center mb-2">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" class="text-ink-500">
+          <rect x="1" y="1" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M4 7h6M7 4v6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <h1 class="font-serif text-display text-ink-800 text-balance leading-tight">
+        Begin a chapter.
+      </h1>
+      <p class="text-body text-ink-500 leading-relaxed">
+        A private archive for this part of your story.
+        No one else sees this.
+      </p>
+    </div>
+
+    <div class="card p-8 flex flex-col gap-6">
+      <%= form_with model: @relationship, url: relationships_path, local: true do |f| %>
+
+        <div class="form-group">
+          <%= f.label :title, "What do you call this chapter?", class: "label" %>
+          <%= f.text_field :title,
+                placeholder: 'e.g. "Our story" or leave it simple',
+                class: "input",
+                autofocus: true %>
+          <% if @relationship.errors[:title].any? %>
+            <p class="text-micro text-rose-500"><%= @relationship.errors[:title].first %></p>
+          <% end %>
+        </div>
+
+        <div class="form-group">
+          <span class="label">Who is keeping this?</span>
+          <div class="flex gap-3">
+            <label class="flex-1 flex items-center gap-3 p-3.5 rounded border border-warm-300 cursor-pointer
+                          hover:border-warm-400 transition-colors has-[:checked]:border-sage-400 has-[:checked]:bg-sage-50">
+              <%= f.radio_button :mode, "solo", checked: true, class: "sr-only" %>
+              <span class="flex flex-col gap-0.5">
+                <span class="text-small font-medium text-ink-700">Solo</span>
+                <span class="text-micro text-ink-400">Your private reflection</span>
+              </span>
+            </label>
+            <label class="flex-1 flex items-center gap-3 p-3.5 rounded border border-warm-300 cursor-pointer
+                          hover:border-warm-400 transition-colors has-[:checked]:border-sage-400 has-[:checked]:bg-sage-50">
+              <%= f.radio_button :mode, "couple", class: "sr-only" %>
+              <span class="flex flex-col gap-0.5">
+                <span class="text-small font-medium text-ink-700">Together</span>
+                <span class="text-micro text-ink-400">Dual perspectives</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :began_on, "When did this begin?", class: "label" %>
+          <%= f.date_field :began_on, class: "input", value: Date.today %>
+        </div>
+
+        <%= f.submit "Begin this chapter",
+              class: "btn-primary btn-lg w-full justify-center mt-2" %>
+      <% end %>
+    </div>
+
+    <p class="text-micro text-ink-400 text-center leading-relaxed">
+      Your archive is private by default.<br>
+      Nothing is shared without your consent.
+    </p>
+  </div>
+</div>

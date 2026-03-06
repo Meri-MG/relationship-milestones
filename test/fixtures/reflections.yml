@@ -1,0 +1,29 @@
+most_myself:
+  relationship: active_couple
+  prompt_type: most_myself
+  content: "When I feel most myself is in quiet moments."
+  private_note: true
+
+patterns:
+  relationship: active_couple
+  prompt_type: patterns
+  content: "I tend to retreat when overwhelmed."
+  private_note: true
+
+carry_forward:
+  relationship: active_couple
+  prompt_type: carry_forward
+  content: "I will carry patience forward."
+  private_note: true
+
+open_reflection:
+  relationship: active_couple
+  prompt_type: open
+  content: "Just some free thoughts today."
+  private_note: true
+
+solo_reflection:
+  relationship: active_solo
+  prompt_type: open
+  content: "Reflecting on this solo journey."
+  private_note: true

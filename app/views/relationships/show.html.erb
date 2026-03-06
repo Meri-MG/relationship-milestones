@@ -1,0 +1,241 @@
+<% content_for :title, "#{@relationship.title} — Timeline" %>
+
+<div class="px-5 md:px-8 py-8 md:py-10 max-w-content mx-auto flex flex-col gap-8 animate-fade-in
+            <%= 'ended-filter' if @relationship.ended? %>">
+
+  <%# ── Page header ──────────────────────────────────────── %>
+  <div class="flex items-start justify-between gap-6">
+    <div class="flex flex-col gap-2">
+      <div class="flex items-center gap-2">
+        <% if @relationship.ended? %>
+          <span class="tag tag-warm">Chapter ended</span>
+        <% else %>
+          <span class="tag tag-sage">Active</span>
+        <% end %>
+        <% if @relationship.chapter_number > 1 %>
+          <span class="text-micro text-ink-400">Chapter <%= @relationship.chapter_number %></span>
+        <% end %>
+      </div>
+      <h1 class="font-serif text-display text-ink-800"><%= @relationship.title %></h1>
+      <% if @relationship.began_on %>
+        <p class="text-small text-ink-400">
+          <%= format_date_long(@relationship.began_on) %>
+          <% if @relationship.ended_on %>
+            &ndash; <%= format_date_long(@relationship.ended_on) %>
+          <% end %>
+          &middot; <%= @relationship.duration_label %>
+        </p>
+      <% end %>
+    </div>
+
+    <% if @relationship.active? %>
+      <div class="shrink-0">
+        <%= link_to new_relationship_milestone_path(@relationship),
+              class: "btn-primary",
+              data: { turbo_frame: "modal" } do %>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Add milestone
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <%# ── Filter tabs ──────────────────────────────────────── %>
+  <div class="flex items-center gap-1 overflow-x-auto no-scrollbar -mx-1 px-1">
+    <%= link_to "All",
+          relationship_path(@relationship),
+          class: "btn #{@filter.nil? ? 'btn-secondary btn-sm' : 'btn-ghost btn-sm'}" %>
+    <% [["first", "Firsts"], ["funny", "Funny"], ["conflict", "Conflict"],
+         ["growth", "Growth"], ["transition", "Transitions"]] .each do |type, label| %>
+      <%= link_to label,
+            relationship_path(@relationship, filter: type),
+            class: "btn #{@filter == type ? 'btn-secondary btn-sm' : 'btn-ghost btn-sm'}" %>
+    <% end %>
+  </div>
+
+  <%# ── Timeline ─────────────────────────────────────────── %>
+  <% if @milestones.empty? %>
+    <div class="card-soft p-12 text-center flex flex-col items-center gap-4">
+      <p class="text-body text-ink-400">
+        <% if @filter.present? %>
+          No milestones of this type yet.
+        <% else %>
+          Nothing recorded yet. Begin with the moment that started everything.
+        <% end %>
+      </p>
+      <% if @relationship.active? %>
+        <%= link_to "Add the first moment",
+              new_relationship_milestone_path(@relationship),
+              class: "btn-secondary" %>
+      <% end %>
+    </div>
+  <% else %>
+    <%# Render previous chapters first (if any) %>
+    <% prev_chapters = @chapters.reject { |c| c.id == @relationship.id } %>
+    <% prev_chapters.each do |chapter| %>
+      <div class="chapter-sep">
+        <span class="text-micro text-ink-400 tracking-widest uppercase px-4">
+          Chapter <%= chapter.chapter_number %> &middot; Archived
+        </span>
+      </div>
+      <div class="flex flex-col gap-4 opacity-50">
+        <% chapter.milestones.each do |m| %>
+          <div class="card p-4 flex gap-4">
+            <div class="milestone-date shrink-0">
+              <span class="milestone-date-day"><%= m.occurred_on&.strftime("%-d") %></span>
+              <span class="milestone-date-month"><%= m.occurred_on&.strftime("%b %Y") %></span>
+            </div>
+            <div class="flex-1 flex items-center gap-3">
+              <span class="text-small text-ink-600"><%= m.title %></span>
+              <span class="tag <%= milestone_type_bg(m.milestone_type) %>"><%= m.type_label %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="chapter-sep">
+        <span class="text-micro text-ink-400 tracking-widest uppercase px-4">
+          Chapter <%= @relationship.chapter_number %> &middot; Current
+        </span>
+      </div>
+    <% end %>
+
+    <%# Active chapter milestones — new card design %>
+    <div class="flex flex-col gap-4" data-controller="timeline">
+
+      <% @milestones.each_with_index do |milestone, idx| %>
+        <div class="card p-5 md:p-6 flex gap-5 md:gap-6 animate-fade-in"
+             style="animation-delay: <%= idx * 60 %>ms"
+             id="milestone-<%= milestone.id %>">
+
+          <%# Large date column %>
+          <div class="milestone-date shrink-0">
+            <span class="milestone-date-day"><%= milestone.occurred_on&.strftime("%-d") %></span>
+            <span class="milestone-date-month"><%= milestone.occurred_on&.strftime("%b %Y") %></span>
+          </div>
+
+          <%# Content column %>
+          <div class="flex-1 min-w-0 flex flex-col gap-3">
+            <div class="flex items-start justify-between gap-3">
+              <h3 class="font-serif text-title text-ink-800 leading-snug">
+                <%= milestone.title %>
+              </h3>
+              <span class="tag <%= milestone_type_bg(milestone.milestone_type) %> shrink-0">
+                <%= milestone.type_label %>
+              </span>
+            </div>
+
+            <% if milestone.description.present? %>
+              <p class="text-small text-ink-500 leading-relaxed">
+                <%= milestone.description %>
+              </p>
+            <% end %>
+
+            <%# Emotional tags %>
+            <% if milestone.emotional_tags.present? %>
+              <div class="flex flex-wrap gap-1.5">
+                <% milestone.emotional_tags.compact.each do |tag| %>
+                  <span class="tag-warm"><%= tag %></span>
+                <% end %>
+              </div>
+            <% end %>
+
+            <%# Dual-perspective quotes %>
+            <% if milestone.my_perspective.present? || milestone.partner_perspective.present? %>
+              <div class="flex flex-col sm:flex-row gap-3 mt-1">
+                <% if milestone.my_perspective.present? %>
+                  <div class="perspective-quote">
+                    <div class="perspective-quote-label">
+                      <%= person_name(@relationship) || "My perspective" %>
+                    </div>
+                    <p class="perspective-quote-text">"<%= milestone.my_perspective %>"</p>
+                  </div>
+                <% end %>
+                <% if @relationship.couple? && milestone.partner_perspective.present? %>
+                  <div class="perspective-quote">
+                    <div class="perspective-quote-label">
+                      <%= partner_name(@relationship) || "Their perspective" %>
+                    </div>
+                    <p class="perspective-quote-text">"<%= milestone.partner_perspective %>"</p>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+
+            <%# Photo %>
+            <% if milestone.photo.attached? %>
+              <div class="mt-1">
+                <%= image_tag url_for(milestone.photo),
+                      class: "rounded-md max-h-72 object-cover w-full",
+                      alt: milestone.title %>
+              </div>
+            <% end %>
+
+            <%# Repair note %>
+            <% if milestone.conflict? && milestone.repair_notes.present? %>
+              <div class="flex items-start gap-2.5 bg-sage-50 border border-sage-100 rounded p-3.5 mt-1">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" class="text-sage-500 shrink-0 mt-0.5">
+                  <path d="M2 7l3 3 7-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-micro text-sage-600 uppercase tracking-widest">Repair note</span>
+                  <p class="text-small text-ink-600 leading-relaxed"><%= milestone.repair_notes %></p>
+                </div>
+              </div>
+            <% end %>
+
+            <%# Actions %>
+            <% if @relationship.active? %>
+              <div class="flex items-center gap-2 pt-2 border-t border-warm-100">
+                <%= link_to "Edit",
+                      edit_relationship_milestone_path(@relationship, milestone),
+                      class: "btn-ghost btn-sm" %>
+                <%= button_to "Remove",
+                      relationship_milestone_path(@relationship, milestone),
+                      method: :delete,
+                      class: "btn-ghost btn-sm text-rose-400 hover:text-rose-600 hover:bg-rose-50",
+                      data: { turbo_confirm: "Remove this milestone from your timeline?" } %>
+                <span class="ml-auto text-micro text-ink-300">
+                  Added <%= time_ago_label(milestone.created_at) %>
+                </span>
+              </div>
+            <% end %>
+          </div>
+
+        </div>
+      <% end %>
+
+      <%# End-of-timeline marker %>
+      <% if @relationship.ended? %>
+        <div class="card-soft p-4 flex items-center gap-4 opacity-60">
+          <div class="milestone-date shrink-0">
+            <span class="milestone-date-day text-2xl"><%= @relationship.ended_on&.strftime("%-d") %></span>
+            <span class="milestone-date-month"><%= @relationship.ended_on&.strftime("%b %Y") %></span>
+          </div>
+          <span class="text-small text-ink-500 italic">This chapter has come to an end.</span>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%# ── Ended — unlock reflections ──────────────────────── %>
+  <% if @relationship.ended? %>
+    <div class="card p-7 flex flex-col gap-4 border-l-2 border-slate-200 mt-4">
+      <div class="flex flex-col gap-1.5">
+        <h2 class="font-serif text-title text-ink-700">Reflections are now open</h2>
+        <p class="text-small text-ink-500 leading-relaxed">
+          With this chapter closed, guided reflection prompts are available.
+          Take the time you need.
+        </p>
+      </div>
+      <div class="flex gap-3">
+        <%= link_to "Begin reflecting", relationship_reflections_path(@relationship),
+              class: "btn-secondary" %>
+        <%= link_to "View insights", relationship_insights_path(@relationship),
+              class: "btn-ghost" %>
+      </div>
+    </div>
+  <% end %>
+
+</div>

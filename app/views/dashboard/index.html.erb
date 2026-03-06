@@ -1,0 +1,485 @@
+<% content_for :title, "Dashboard — Relationship Milestones" %>
+
+<% if @relationship.nil? %>
+  <%# ── Onboarding — no relationship yet ──────────────────── %>
+  <div class="min-h-screen flex items-center justify-center p-8">
+    <div class="max-w-md w-full flex flex-col gap-10 animate-fade-in">
+      <div class="flex flex-col gap-3">
+        <h1 class="font-serif text-display text-ink-800 leading-tight text-balance">
+          A space for your story.
+        </h1>
+        <p class="text-body text-ink-500 leading-relaxed max-w-prose-sm">
+          Document the moments that shaped this chapter — calmly, privately, without judgment.
+        </p>
+      </div>
+
+      <div class="card p-8 flex flex-col gap-6">
+        <%= form_with model: Relationship.new, url: relationships_path, local: true do |f| %>
+          <div class="form-group">
+            <%= f.label :title, "Give this chapter a name", class: "label" %>
+            <%= f.text_field :title,
+                  placeholder: 'e.g. "Sarah & Alex" or just "Our story"',
+                  class: "input",
+                  autofocus: true %>
+            <p class="text-micro text-ink-400 mt-1">Use "Name & Name" to enable personalized greetings.</p>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :mode, "Who is keeping this archive?", class: "label" %>
+            <div class="flex gap-3">
+              <label class="flex-1 flex items-center gap-3 p-3.5 rounded border border-warm-300 cursor-pointer
+                            has-[:checked]:border-sage-400 has-[:checked]:bg-sage-50 transition-colors duration-150">
+                <%= f.radio_button :mode, "solo", class: "sr-only", checked: true %>
+                <span class="w-2 h-2 rounded-full bg-ink-300 peer-checked:bg-sage-500 shrink-0"></span>
+                <span class="flex flex-col gap-0.5">
+                  <span class="text-small font-medium text-ink-700">Solo</span>
+                  <span class="text-micro text-ink-400">Private reflection</span>
+                </span>
+              </label>
+              <label class="flex-1 flex items-center gap-3 p-3.5 rounded border border-warm-300 cursor-pointer
+                            has-[:checked]:border-sage-400 has-[:checked]:bg-sage-50 transition-colors duration-150">
+                <%= f.radio_button :mode, "couple", class: "sr-only" %>
+                <span class="w-2 h-2 rounded-full bg-ink-300 shrink-0"></span>
+                <span class="flex flex-col gap-0.5">
+                  <span class="text-small font-medium text-ink-700">Together</span>
+                  <span class="text-micro text-ink-400">Shared space</span>
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :began_on, "When did this begin?", class: "label" %>
+            <%= f.date_field :began_on, class: "input", value: Date.today %>
+          </div>
+
+          <%= f.submit "Begin this chapter",
+                class: "btn-primary btn-lg w-full justify-center mt-2" %>
+        <% end %>
+      </div>
+
+      <p class="text-micro text-ink-400 text-center">
+        Your archive is private. Nothing is shared without your consent.
+      </p>
+    </div>
+  </div>
+
+<% else %>
+  <%# ── Dashboard — has relationship ──────────────────────── %>
+  <div class="px-5 md:px-8 py-8 md:py-10 max-w-wide mx-auto flex flex-col gap-8 animate-fade-in">
+
+    <%# ── Header row ──────────────────────────────────────── %>
+    <div class="flex items-start justify-between gap-4">
+      <div class="flex flex-col gap-1.5">
+        <div class="flex items-center gap-2 mb-1">
+          <% if @relationship.ended? %>
+            <span class="tag tag-warm">Ended</span>
+          <% else %>
+            <span class="tag tag-sage">Active</span>
+          <% end %>
+          <% if @relationship.chapter_number > 1 %>
+            <span class="text-micro text-ink-400">Chapter <%= @relationship.chapter_number %></span>
+          <% end %>
+        </div>
+        <h1 class="font-serif text-display text-ink-800 leading-tight">
+          <%= @greeting %>
+        </h1>
+        <% if @relationship.began_on && @days_together %>
+          <p class="text-body text-ink-400">
+            Day <%= number_with_delimiter(@days_together) %> of your journey
+            <% if partner_name(@relationship) %>
+              with <%= partner_name(@relationship) %>.
+            <% else %>
+              of this chapter.
+            <% end %>
+          </p>
+        <% end %>
+      </div>
+
+      <% if @relationship.active? %>
+        <%= link_to new_relationship_milestone_path(@relationship),
+              class: "btn-primary shrink-0",
+              data: { turbo_frame: "modal" } do %>
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+            <path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Add Milestone
+        <% end %>
+      <% end %>
+    </div>
+
+    <%# ── Monthly Insight card ─────────────────────────────── %>
+    <div class="insight-card-featured" id="monthly-insight">
+      <div class="flex items-start justify-between gap-4 mb-4">
+        <div class="flex items-center gap-2">
+          <span class="insight-label">Monthly Insight</span>
+          <span class="text-micro text-ink-300">&middot; Generated today</span>
+        </div>
+        <button onclick="document.getElementById('monthly-insight').style.display='none'"
+                class="text-ink-300 hover:text-ink-500 transition-colors text-micro">
+          Dismiss
+        </button>
+      </div>
+      <h2 class="font-serif text-title text-ink-800 mb-2">
+        <%= @monthly_insight[:headline] %>
+      </h2>
+      <p class="text-small text-ink-500 leading-relaxed mb-4">
+        <%= @monthly_insight[:body] %>
+      </p>
+      <div class="flex items-center gap-3">
+        <%= link_to "View Analysis", relationship_insights_path(@relationship),
+              class: "text-small text-sage-600 hover:text-sage-700 transition-colors font-medium" %>
+      </div>
+    </div>
+
+    <%# ── Two-column grid ─────────────────────────────────── %>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <%# Left — Relationship Health (2/3 width) %>
+      <div class="md:col-span-2 card p-6 flex flex-col gap-5">
+        <div class="flex items-center justify-between">
+          <h2 class="text-title text-ink-700">Relationship Health</h2>
+          <span class="text-micro text-ink-400"><%= @relationship.milestones.count %> moments</span>
+        </div>
+
+        <% if @relationship.milestones.count.zero? %>
+          <p class="text-small text-ink-400 italic py-2">
+            Add milestones to see health indicators.
+          </p>
+        <% else %>
+          <div class="flex flex-col gap-5">
+            <%# Connection bar %>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <span class="text-small text-ink-600">Connection</span>
+                <span class="text-micro font-medium text-ink-500">
+                  <%= @relationship_health[:connection][:label] %>
+                </span>
+              </div>
+              <div class="health-bar-track">
+                <div class="health-bar health-bar-connection"
+                     style="width: <%= @relationship_health[:connection][:score] %>%"></div>
+              </div>
+            </div>
+
+            <%# Growth bar %>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <span class="text-small text-ink-600">Growth</span>
+                <span class="text-micro font-medium text-ink-500">
+                  <%= @relationship_health[:growth][:label] %>
+                </span>
+              </div>
+              <div class="health-bar-track">
+                <div class="health-bar health-bar-growth"
+                     style="width: <%= @relationship_health[:growth][:score] %>%"></div>
+              </div>
+            </div>
+
+            <%# Conflict Resolution bar %>
+            <div class="flex flex-col gap-2">
+              <div class="flex items-center justify-between">
+                <span class="text-small text-ink-600">Conflict Resolution</span>
+                <span class="text-micro font-medium text-ink-500">
+                  <%= @relationship_health[:conflict_resolution][:label] %>
+                </span>
+              </div>
+              <% repair_score = @relationship_health[:conflict_resolution][:score] %>
+              <div class="health-bar-track">
+                <div class="health-bar health-bar-conflict"
+                     style="width: <%= repair_score || 0 %>%"></div>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-small text-ink-400 italic border-t border-warm-100 pt-4">
+            "<%= @relationship_health[:quote] %>"
+          </p>
+        <% end %>
+      </div>
+
+      <%# Right column (1/3) %>
+      <div class="flex flex-col gap-4">
+
+        <%# Latest Reflection card %>
+        <div class="card p-5 flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-small font-medium text-ink-700">Latest Reflection</h3>
+            <%= link_to "All", relationship_reflections_path(@relationship),
+                  class: "text-micro text-ink-400 hover:text-ink-600 transition-colors" %>
+          </div>
+
+          <% if @latest_reflection&.content.present? %>
+            <p class="text-small text-ink-500 leading-relaxed line-clamp-4 italic">
+              "<%= @latest_reflection.content %>"
+            </p>
+            <span class="text-micro text-ink-400">
+              <%= time_ago_label(@latest_reflection.created_at) %>
+            </span>
+          <% else %>
+            <p class="text-small text-ink-400 italic">No reflections yet.</p>
+          <% end %>
+
+          <%= link_to "Write New Reflection",
+                relationship_reflections_path(@relationship),
+                class: "btn-secondary w-full justify-center mt-1" %>
+        </div>
+
+        <%# Recent Timeline card %>
+        <div class="card p-5 flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <h3 class="text-small font-medium text-ink-700">Recent Timeline</h3>
+            <%= link_to "View All", relationship_path(@relationship),
+                  class: "text-micro text-ink-400 hover:text-ink-600 transition-colors" %>
+          </div>
+
+          <% if @recent_milestones.empty? %>
+            <p class="text-small text-ink-400 italic">No moments yet.</p>
+          <% else %>
+            <div class="flex flex-col divide-y divide-warm-100">
+              <% @recent_milestones.each do |milestone| %>
+                <%= link_to relationship_milestone_path(@relationship, milestone),
+                      class: "py-2.5 flex items-start gap-3 hover:opacity-80 transition-opacity group" do %>
+                  <span class="text-micro text-ink-400 whitespace-nowrap mt-0.5 shrink-0">
+                    <%= milestone.occurred_on&.strftime("%b %-d") %>
+                  </span>
+                  <span class="text-small text-ink-700 leading-snug flex-1 group-hover:text-ink-900">
+                    <%= milestone.title %>
+                  </span>
+                  <span class="tag <%= milestone_type_bg(milestone.milestone_type) %> shrink-0">
+                    <%= milestone.type_label %>
+                  </span>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+
+        <%# End chapter CTA (subtle) %>
+        <% if @relationship.active? %>
+          <button
+            class="text-micro text-ink-300 hover:text-rose-400 transition-colors duration-200 w-full text-center py-1"
+            data-controller="modal"
+            data-action="click->modal#open"
+            data-modal-target-value="end-chapter-modal">
+            End this chapter
+          </button>
+        <% end %>
+
+        <%# Reconciliation CTA %>
+        <% if @relationship.ended? %>
+          <div class="card-soft p-5 flex flex-col gap-3">
+            <p class="text-small text-ink-500 leading-relaxed">
+              This chapter has come to an end.
+            </p>
+            <button
+              class="btn-secondary w-full justify-center"
+              data-controller="modal"
+              data-action="click->modal#open"
+              data-modal-target-value="new-chapter-modal">
+              Begin a new chapter?
+            </button>
+          </div>
+        <% end %>
+
+      </div>
+    </div>
+
+    <%# ── Your Journey section ────────────────────────────── %>
+    <div class="flex flex-col gap-5">
+      <div class="flex items-end justify-between gap-4">
+        <div class="flex flex-col gap-1">
+          <h2 class="font-serif text-heading text-ink-800">Your Journey</h2>
+          <p class="text-small text-ink-400">A chronological archive of your shared history.</p>
+        </div>
+        <% if @relationship.active? %>
+          <%= link_to new_relationship_milestone_path(@relationship),
+                class: "btn-ghost btn-sm shrink-0",
+                data: { turbo_frame: "modal" } do %>
+            + Add moment
+          <% end %>
+        <% end %>
+      </div>
+
+      <%# Filter pills %>
+      <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar -mx-1 px-1">
+        <%= link_to "All",
+              relationship_path(@relationship),
+              class: "btn btn-sm #{params[:filter].nil? ? 'btn-secondary' : 'btn-ghost'}" %>
+        <% [["first","Firsts"],["funny","Funny"],["conflict","Conflict"],["growth","Growth"]].each do |type, label| %>
+          <%= link_to label,
+                relationship_path(@relationship, filter: type),
+                class: "btn btn-sm #{params[:filter] == type ? 'btn-secondary' : 'btn-ghost'}" %>
+        <% end %>
+      </div>
+
+      <%# Milestone cards — new style %>
+      <% journey_milestones = params[:filter].present? ?
+           @relationship.milestones.by_type(params[:filter]).recent :
+           @relationship.milestones.recent %>
+      <% if journey_milestones.empty? %>
+        <div class="card-soft p-10 text-center">
+          <p class="text-small text-ink-400">
+            <%= params[:filter].present? ? "No #{params[:filter]} milestones yet." : "Your first milestone is waiting to be recorded." %>
+          </p>
+        </div>
+      <% else %>
+        <div class="flex flex-col gap-4">
+          <% journey_milestones.each do |milestone| %>
+            <div class="card p-5 md:p-6 flex gap-5 md:gap-6">
+              <%# Date column %>
+              <div class="milestone-date shrink-0">
+                <span class="milestone-date-day"><%= milestone.occurred_on&.strftime("%-d") %></span>
+                <span class="milestone-date-month"><%= milestone.occurred_on&.strftime("%b %Y") %></span>
+              </div>
+
+              <%# Content column %>
+              <div class="flex-1 min-w-0 flex flex-col gap-3">
+                <div class="flex items-start justify-between gap-3">
+                  <h3 class="font-serif text-title text-ink-800 leading-snug">
+                    <%= milestone.title %>
+                  </h3>
+                  <span class="tag <%= milestone_type_bg(milestone.milestone_type) %> shrink-0">
+                    <%= milestone.type_label %>
+                  </span>
+                </div>
+
+                <% if milestone.description.present? %>
+                  <p class="text-small text-ink-500 leading-relaxed">
+                    <%= milestone.description %>
+                  </p>
+                <% end %>
+
+                <%# Dual-perspective quotes (couple mode) %>
+                <% if milestone.my_perspective.present? || milestone.partner_perspective.present? %>
+                  <div class="flex flex-col sm:flex-row gap-3 mt-1">
+                    <% if milestone.my_perspective.present? %>
+                      <div class="perspective-quote">
+                        <div class="perspective-quote-label">
+                          <%= person_name(@relationship) || "My perspective" %>
+                        </div>
+                        <p class="perspective-quote-text">"<%= milestone.my_perspective %>"</p>
+                      </div>
+                    <% end %>
+                    <% if @relationship.couple? && milestone.partner_perspective.present? %>
+                      <div class="perspective-quote">
+                        <div class="perspective-quote-label">
+                          <%= partner_name(@relationship) || "Their perspective" %>
+                        </div>
+                        <p class="perspective-quote-text">"<%= milestone.partner_perspective %>"</p>
+                      </div>
+                    <% end %>
+                  </div>
+                <% end %>
+
+                <%# Photo grid %>
+                <% if milestone.photo.attached? %>
+                  <div class="mt-1">
+                    <%= image_tag url_for(milestone.photo),
+                          class: "rounded-md max-h-64 object-cover w-full",
+                          alt: milestone.title %>
+                  </div>
+                <% end %>
+
+                <%# Repair notes %>
+                <% if milestone.conflict? && milestone.repair_notes.present? %>
+                  <div class="flex items-start gap-2.5 bg-sage-50 border border-sage-100 rounded p-3.5 mt-1">
+                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" class="text-sage-500 shrink-0 mt-0.5">
+                      <path d="M2 7l3 3 7-7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <div class="flex flex-col gap-0.5">
+                      <span class="text-micro text-sage-600 uppercase tracking-widest">Repair note</span>
+                      <p class="text-small text-ink-600 leading-relaxed"><%= milestone.repair_notes %></p>
+                    </div>
+                  </div>
+                <% end %>
+
+                <%# Emotional tags %>
+                <% if milestone.emotional_tags.present? %>
+                  <div class="flex flex-wrap gap-1.5">
+                    <% milestone.emotional_tags.compact.each do |tag| %>
+                      <span class="tag-warm"><%= tag %></span>
+                    <% end %>
+                  </div>
+                <% end %>
+
+                <%# Actions %>
+                <% if @relationship.active? %>
+                  <div class="flex items-center gap-2 pt-1 border-t border-warm-100">
+                    <%= link_to "Edit",
+                          edit_relationship_milestone_path(@relationship, milestone),
+                          class: "btn-ghost btn-sm" %>
+                    <%= button_to "Remove",
+                          relationship_milestone_path(@relationship, milestone),
+                          method: :delete,
+                          class: "btn-ghost btn-sm text-rose-400 hover:text-rose-600",
+                          data: { turbo_confirm: "Remove this milestone?" } %>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+
+  <%# ── End chapter modal ─────────────────────────────────── %>
+  <div id="end-chapter-modal" class="modal-backdrop hidden" data-controller="modal" data-modal-closeable>
+    <div class="modal-panel-sm">
+      <div class="p-8 flex flex-col gap-6">
+        <div class="flex flex-col gap-2">
+          <h2 class="font-serif text-heading text-ink-800">End this chapter?</h2>
+          <p class="text-small text-ink-500 leading-relaxed">
+            This will close this part of your journey.
+            Your memories remain safe and the timeline will be preserved.
+          </p>
+        </div>
+        <div class="divider"></div>
+        <div class="flex flex-col gap-3">
+          <%= button_to "Close this chapter",
+                end_chapter_relationship_path(@relationship),
+                method: :patch,
+                class: "btn-danger w-full justify-center" %>
+          <button onclick="document.getElementById('end-chapter-modal').classList.add('hidden')"
+                  class="btn-ghost w-full justify-center">
+            Not yet
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <%# ── New chapter modal ──────────────────────────────────── %>
+  <% if @relationship.ended? %>
+    <div id="new-chapter-modal" class="modal-backdrop hidden" data-controller="modal" data-modal-closeable>
+      <div class="modal-panel-sm">
+        <div class="p-8 flex flex-col gap-6">
+          <div class="flex flex-col gap-2">
+            <h2 class="font-serif text-heading text-ink-800">Begin a new chapter?</h2>
+            <p class="text-small text-ink-500 leading-relaxed">
+              If you are choosing each other again, you can begin a new chapter
+              while keeping your shared history intact.
+            </p>
+          </div>
+          <div class="card-soft p-4 flex flex-col gap-2">
+            <p class="text-micro text-ink-400">Your previous chapter will be archived, not deleted.</p>
+          </div>
+          <div class="divider"></div>
+          <div class="flex flex-col gap-3">
+            <%= button_to "Begin a new chapter",
+                  new_chapter_relationship_path(@relationship),
+                  method: :post,
+                  class: "btn-primary w-full justify-center" %>
+            <button onclick="document.getElementById('new-chapter-modal').classList.add('hidden')"
+                    class="btn-ghost w-full justify-center">
+              Keep archived
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+<% end %>
