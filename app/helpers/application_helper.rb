@@ -1,4 +1,27 @@
 module ApplicationHelper
+  # Personalization helpers
+  def person_name(relationship)
+    relationship.title.split(" & ").first&.strip
+  end
+
+  def partner_name(relationship)
+    parts = relationship.title.split(" & ")
+    parts.length > 1 ? parts.last&.strip : nil
+  end
+
+  def time_greeting
+    hour = Time.current.hour
+    if hour < 12 then "Morning"
+    elsif hour < 17 then "Afternoon"
+    else "Evening"
+    end
+  end
+
+  def days_together(date)
+    return nil unless date
+    (Date.today - date.to_date).to_i
+  end
+
   # Return a Tailwind bg class for a milestone type
   def milestone_type_bg(type)
     {

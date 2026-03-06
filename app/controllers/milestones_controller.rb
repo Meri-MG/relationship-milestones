@@ -49,7 +49,7 @@ class MilestonesController < ApplicationController
     params.require(:milestone).permit(
       :title, :occurred_on, :milestone_type,
       :description, :my_perspective, :partner_perspective,
-      :repair_notes, :emotional_intensity, :photo_filename,
+      :repair_notes, :emotional_intensity, :photo,
       emotional_tags: []
     )
   end

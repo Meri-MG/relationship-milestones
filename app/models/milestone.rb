@@ -28,6 +28,7 @@ class Milestone < ApplicationRecord
   }.freeze
 
   belongs_to :relationship
+  has_one_attached :photo
 
   validates :title,          presence: true
   validates :occurred_on,    presence: true

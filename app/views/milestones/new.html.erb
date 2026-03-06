@@ -28,6 +28,7 @@
 
     <%= form_with model: [@relationship, @milestone],
           url: relationship_milestones_path(@relationship),
+          multipart: true,
           data: { step_modal_target: "form", turbo: false } do |f| %>
 
       <%# ── Step 1: Type selection ─────────────────────── %>
@@ -93,6 +94,17 @@
                 rows: 3,
                 placeholder: "What happened? Keep it honest, not performative.",
                 class: "textarea" %>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :photo, "Photo", class: "label" %>
+          <span class="text-micro text-ink-400 -mt-1 mb-1">Optional — attach a photo to this moment.</span>
+          <%= f.file_field :photo,
+                accept: "image/*",
+                class: "block w-full text-small text-ink-600 file:mr-3 file:py-1.5 file:px-3
+                        file:rounded file:border file:border-warm-300 file:bg-warm-100
+                        file:text-small file:text-ink-600 file:cursor-pointer
+                        hover:file:bg-warm-200 transition-all" %>
         </div>
 
         <%# Emotional tags %>

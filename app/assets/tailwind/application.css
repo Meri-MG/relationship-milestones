@@ -421,7 +421,89 @@
     padding-top: 2rem; padding-bottom: 1.5rem;
     z-index: 20;
   }
-  .main-content { margin-left: 14rem; min-height: 100vh; }
+  .main-content { margin-left: 0; min-height: 100vh; }
+  @media (min-width: 768px) { .main-content { margin-left: 14rem; } }
+
+  /* Mobile bottom nav */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 30;
+    background-color: white;
+    border-top: 1px solid var(--color-warm-200);
+    display: flex; align-items: stretch;
+    box-shadow: 0 -2px 12px rgba(44,40,37,0.06);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .bottom-nav-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 3px;
+    padding: 0.625rem 0.5rem;
+    color: var(--color-ink-400);
+    text-decoration: none;
+    font-size: var(--text-micro); font-weight: 500;
+    transition: color 200ms;
+  }
+  .bottom-nav-item:hover  { color: var(--color-ink-700); }
+  .bottom-nav-item.active { color: var(--color-ink-800); }
+
+  /* Relationship health bars */
+  .health-bar-track {
+    flex: 1; height: 6px;
+    background-color: var(--color-warm-100);
+    border-radius: 9999px; overflow: hidden;
+  }
+  .health-bar {
+    height: 100%; border-radius: 9999px;
+    transition: width 700ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .health-bar-connection  { background-color: var(--color-sage-300); }
+  .health-bar-growth      { background-color: var(--color-sage-400); }
+  .health-bar-conflict    { background-color: var(--color-slate-300); }
+
+  /* Milestone date column */
+  .milestone-date {
+    display: flex; flex-direction: column; align-items: center;
+    min-width: 3.5rem; padding-top: 0.125rem;
+  }
+  .milestone-date-day {
+    font-family: var(--font-serif);
+    font-size: 2.5rem; line-height: 1;
+    color: var(--color-ink-700);
+    font-weight: 400;
+  }
+  .milestone-date-month {
+    font-size: var(--text-micro);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--color-ink-400);
+    margin-top: 2px;
+  }
+
+  /* Perspective quote cards */
+  .perspective-quote {
+    flex: 1; padding: 0.875rem 1rem;
+    background-color: var(--color-warm-50);
+    border: 1px solid var(--color-warm-200);
+    border-radius: var(--radius-sm);
+  }
+  .perspective-quote-label {
+    font-size: var(--text-micro);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--color-ink-400); font-weight: 500;
+    margin-bottom: 0.375rem;
+  }
+  .perspective-quote-text {
+    font-size: var(--text-small);
+    color: var(--color-ink-600);
+    font-style: italic; line-height: 1.55;
+  }
+
+  /* Monthly insight card */
+  .insight-card-featured {
+    background: linear-gradient(135deg, var(--color-warm-50) 0%, white 100%);
+    border: 1px solid var(--color-warm-200);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-card);
+    padding: 1.5rem;
+  }
 }
 
 /* ─── Utilities ──────────────────────────────────────────────── */

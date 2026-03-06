@@ -32,16 +32,16 @@ class DashboardControllerTest < ActionController::TestCase
     assert_match(/Our Story Together/, response.body)
   end
 
-  test "GET index shows emotional overview section" do
+  test "GET index shows relationship health section" do
     session[:relationship_id] = @couple.id
     get :index
-    assert_select "h2", text: /Emotional overview/i
+    assert_select "h2", text: /Relationship Health/i
   end
 
-  test "GET index shows recent moments section" do
+  test "GET index shows your journey section" do
     session[:relationship_id] = @couple.id
     get :index
-    assert_select "h2", text: /Recent moments/i
+    assert_select "h2", text: /Your Journey/i
   end
 
   test "GET index shows active badge for active relationship" do
