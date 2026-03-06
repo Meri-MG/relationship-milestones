@@ -1,6 +1,6 @@
 class MilestonesController < ApplicationController
   before_action :require_relationship
-  before_action :set_milestone, only: [:show, :edit, :update, :destroy]
+  before_action :set_milestone, only: [ :show, :edit, :update, :destroy ]
 
   def new
     @milestone = @relationship.milestones.new(occurred_on: Date.today)

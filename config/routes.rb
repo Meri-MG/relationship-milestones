@@ -6,14 +6,14 @@ Rails.application.routes.draw do
   root "dashboard#index"
   get "dashboard", to: "dashboard#index", as: :dashboard
 
-  resources :relationships, only: [:new, :create, :show] do
+  resources :relationships, only: [ :new, :create, :show ] do
     member do
       patch :end_chapter
       post  :new_chapter
     end
 
-    resources :milestones,  except: [:index]
-    resources :reflections, only:   [:index, :create, :update, :destroy]
-    resource  :insights,    only:   [:show], controller: "insights"
+    resources :milestones,  except: [ :index ]
+    resources :reflections, only:   [ :index, :create, :update, :destroy ]
+    resource  :insights,    only:   [ :show ], controller: "insights"
   end
 end

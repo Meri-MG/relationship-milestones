@@ -46,7 +46,7 @@ class RelationshipsController < ApplicationController
   end
 
   def chapter_chain
-    chain = [@relationship]
+    chain = [ @relationship ]
     current = @relationship
     while current.parent_chapter
       current = current.parent_chapter

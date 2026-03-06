@@ -13,7 +13,7 @@ class InsightsController < ApplicationController
     @avg_intensity      = milestones.average(:emotional_intensity)&.round(1)
     @conflict_count     = milestones.by_type("conflict").count
     @growth_count       = milestones.by_type("growth").count
-    @repair_notes_count = milestones.by_type("conflict").where.not(repair_notes: [nil, ""]).count
+    @repair_notes_count = milestones.by_type("conflict").where.not(repair_notes: [ nil, "" ]).count
     @repair_rate        = @conflict_count.zero? ? 0 :
                           ((@repair_notes_count.to_f / @conflict_count) * 100).round
 
@@ -27,7 +27,7 @@ class InsightsController < ApplicationController
   private
 
   def chapter_chain
-    chain = [@relationship]
+    chain = [ @relationship ]
     current = @relationship
     while current.parent_chapter
       current = current.parent_chapter

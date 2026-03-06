@@ -19,7 +19,7 @@ class DashboardController < ApplicationController
 
     this_count  = this_month.count
     last_count  = last_month.count
-    growth_pct  = this_month.where(milestone_type: "growth").count.to_f / [this_count, 1].max
+    growth_pct  = this_month.where(milestone_type: "growth").count.to_f / [ this_count, 1 ].max
 
     headline, body = if growth_pct >= 0.4
       [

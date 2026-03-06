@@ -55,7 +55,7 @@ class InsightsControllerTest < ActionController::TestCase
   test "GET show assigns repair_notes_count correctly" do
     get :show, params: { relationship_id: @rel.id }
     expected = @rel.milestones.by_type("conflict")
-                              .where.not(repair_notes: [nil, ""])
+                              .where.not(repair_notes: [ nil, "" ])
                               .count
     assert_equal expected, assigns(:repair_notes_count)
   end

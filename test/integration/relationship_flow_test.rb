@@ -3,7 +3,6 @@ require "test_helper"
 # Full user-journey integration tests.
 # Each test uses the actual HTTP stack (routing → controller → view).
 class RelationshipFlowTest < ActionDispatch::IntegrationTest
-
   # ── Onboarding flow ──────────────────────────────────────────
 
   test "visitor sees onboarding on root path" do
@@ -71,7 +70,7 @@ class RelationshipFlowTest < ActionDispatch::IntegrationTest
       post relationship_milestones_path(rel), params: {
         milestone: { title: "A quiet moment", occurred_on: Date.today,
                      milestone_type: "growth", emotional_intensity: 5,
-                     emotional_tags: ["joy"] }
+                     emotional_tags: [ "joy" ] }
       }
     end
     assert_redirected_to relationship_path(rel)

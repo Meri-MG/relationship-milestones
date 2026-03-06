@@ -31,7 +31,7 @@ module ApplicationHelper
       "growth"     => "bg-sage-100 text-sage-700 border-sage-200",
       "transition" => "bg-slate-100 text-slate-600 border-slate-200",
       "ending"     => "bg-warm-200 text-ink-600 border-warm-300",
-      "custom"     => "bg-warm-100 text-ink-500 border-warm-200",
+      "custom"     => "bg-warm-100 text-ink-500 border-warm-200"
     }.fetch(type.to_s, "bg-warm-100 text-ink-500 border-warm-200")
   end
 
@@ -42,7 +42,7 @@ module ApplicationHelper
       "conflict"   => "timeline-node-conflict",
       "growth"     => "timeline-node-growth",
       "transition" => "timeline-node-transition",
-      "ending"     => "timeline-node",
+      "ending"     => "timeline-node"
     }.fetch(type.to_s, "timeline-node")
   end
 

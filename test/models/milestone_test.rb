@@ -178,7 +178,7 @@ class MilestoneTest < ActiveSupport::TestCase
   test "emotional_tags can store multiple tags" do
     m = couple_rel.milestones.create!(title: "Tagged", occurred_on: Date.today,
                                       milestone_type: "growth",
-                                      emotional_tags: ["joy", "growth"])
+                                      emotional_tags: [ "joy", "growth" ])
     assert_includes m.reload.emotional_tags, "joy"
     assert_includes m.reload.emotional_tags, "growth"
     m.destroy

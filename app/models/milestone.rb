@@ -14,7 +14,7 @@ class Milestone < ApplicationRecord
     "growth"     => "Growth",
     "transition" => "Transition",
     "ending"     => "Ending",
-    "custom"     => "Custom",
+    "custom"     => "Custom"
   }.freeze
 
   TYPE_COLORS = {
@@ -24,7 +24,7 @@ class Milestone < ApplicationRecord
     "growth"     => "sage",
     "transition" => "slate",
     "ending"     => "warm",
-    "custom"     => "warm",
+    "custom"     => "warm"
   }.freeze
 
   belongs_to :relationship

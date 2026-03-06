@@ -3,7 +3,7 @@ class Reflection < ApplicationRecord
     "most_myself"   => "When did I feel most myself?",
     "patterns"      => "What patterns repeat?",
     "carry_forward" => "What will I carry forward?",
-    "open"          => nil,  # free-form
+    "open"          => nil  # free-form
   }.freeze
 
   belongs_to :relationship
