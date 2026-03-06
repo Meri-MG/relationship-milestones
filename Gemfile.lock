@@ -163,10 +163,13 @@ GEM
     nokogiri (1.18.10)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
+    nokogiri (1.18.10-x86_64-darwin)
+      racc (~> 1.4)
     parallel (1.27.0)
     parser (3.3.10.2)
       ast (~> 2.4.1)
       racc
+    pg (1.6.3)
     pg (1.6.3-aarch64-linux)
     pg (1.6.3-x86_64-darwin)
     pg (1.6.3-x86_64-linux)
@@ -292,6 +295,7 @@ GEM
     tailwindcss-rails (4.4.0)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
+    tailwindcss-ruby (4.2.0)
     tailwindcss-ruby (4.2.0-aarch64-linux)
     tailwindcss-ruby (4.2.0-x86_64-darwin)
     tailwindcss-ruby (4.2.0-x86_64-linux)
@@ -323,7 +327,9 @@ GEM
 
 PLATFORMS
   aarch64-linux
+  ruby
   x86_64-darwin-19
+  x86_64-darwin-24
   x86_64-linux
 
 DEPENDENCIES
@@ -343,10 +349,10 @@ DEPENDENCIES
   simplecov
   sprockets-rails
   stimulus-rails
-  tailwindcss-rails
+  tailwindcss-rails (~> 4.0)
   turbo-rails
   tzinfo-data
   web-console
 
 BUNDLED WITH
-   2.4.18
+   2.7.2
