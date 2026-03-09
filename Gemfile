@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 7.2.2", ">= 7.2.2.1"
+gem "rails", "~> 8.1.2"
 # Pin minitest to 5.x — minitest 6.0 breaks Rails 7.2's line_filtering
 gem "minitest", "~> 5.0"
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
